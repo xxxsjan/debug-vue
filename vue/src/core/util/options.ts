@@ -291,12 +291,15 @@ const defaultStrat = function (parentVal: any, childVal: any): any {
  * Validate component names
  */
 function checkComponents(options: Record<string, any>) {
+  // 遍历检验组件的名字
   for (const key in options.components) {
     validateComponentName(key)
   }
 }
 
+// 检验组件名
 export function validateComponentName(name: string) {
+  // 组件名需要符合html5规范
   if (
     !new RegExp(`^[a-zA-Z][\\-\\.0-9_${unicodeRegExp.source}]*$`).test(name)
   ) {
@@ -307,6 +310,7 @@ export function validateComponentName(name: string) {
         'should conform to valid custom element name in html5 specification.'
     )
   }
+  // 名字不能与内置组件名一样，比如slot component， config.isReservedTag(name)总是返回false
   if (isBuiltInTag(name) || config.isReservedTag(name)) {
     warn(
       'Do not use built-in or reserved HTML elements as component ' +
@@ -317,8 +321,7 @@ export function validateComponentName(name: string) {
 }
 
 /**
- * Ensure all props option syntax are normalized into the
- * Object-based format.
+ * 确保所有props选项语法都规范化为基于对象的格式。
  */
 function normalizeProps(options: Record<string, any>, vm?: Component | null) {
   const props = options.props
@@ -413,6 +416,7 @@ export function mergeOptions(
   child: Record<string, any>,
   vm?: Component | null
 ): ComponentOptions {
+  // 开发模式下 检查子组件的options上的components，不能是内置组件名字，要符合html5规范
   if (__DEV__) {
     checkComponents(child)
   }
@@ -421,9 +425,11 @@ export function mergeOptions(
     // @ts-expect-error
     child = child.options
   }
-
+  // 确保所有props选项语法都规范化为基于对象的格式。
   normalizeProps(child, vm)
+  // 将所有注入规范化为基于对象的格式
   normalizeInject(child, vm)
+  // 将vue指令规范化为对象格式。
   normalizeDirectives(child)
 
   // Apply extends and mixins on the child options,
