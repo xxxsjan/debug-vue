@@ -84,6 +84,7 @@ export default {
   /**
    * Check if a tag is reserved so that it cannot be registered as a
    * component. This is platform-dependent and may be overwritten.
+   * no 函数 总是返回false
    */
   isReservedTag: no,
 
