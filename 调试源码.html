@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./vue/dist/vue.js"></script>
+    <style>
+      .box {
+        width: 0;
+        height: 0;
+        border-top: 200px solid blueviolet;
+        border-bottom: 200px solid orange;
+        border-left: 200px solid pink;
+        border-right: 200px solid yellow;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="demo">
+      <div>aaaaaa--{{a}}</div>
+      <div>bbbbbb--{{b}}</div>
+      <button @click="tap">tap</button>
+      <div class="box"></div>
+    </div>
+    <script>
+      debugger;
+      new Vue({
+        el: "#demo",
+        data: {
+          a: 0,
+          b: 1,
+        },
+        methods: {
+          tap() {
+            for (let i = 0; i < 10; i++) {
+              this.a = i;
+            }
+            this.b = 666;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
