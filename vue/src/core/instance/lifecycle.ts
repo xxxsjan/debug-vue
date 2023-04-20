@@ -30,30 +30,43 @@ export function setActiveInstance(vm: Component) {
     activeInstance = prevActiveInstance
   }
 }
-
+// 初始化生命周期
 export function initLifecycle(vm: Component) {
   const options = vm.$options
 
-  // locate first non-abstract parent
+  // 找到最近一个非抽象的父级，把他设置为自己的parent
+  // 抽象组件，是指一个不具体渲染任何内容的组件，它仅仅是用来提供共享的数据或方法给其他组件使用的
   let parent = options.parent
+  debugger
   if (parent && !options.abstract) {
     while (parent.$options.abstract && parent.$parent) {
       parent = parent.$parent
     }
     parent.$children.push(vm)
   }
-
+  // 设置为自己的parent
   vm.$parent = parent
+  // 设置根组件，首个进初始的一定是没有parent的，所以是本身
+  // 后续组件也会沿着parent.$root拿到首个组件
   vm.$root = parent ? parent.$root : vm
 
+  // 初始化
   vm.$children = []
   vm.$refs = {}
-
+  // 拿到注入的数据，没有就初始为Object.create(null)
   vm._provided = parent ? parent._provided : Object.create(null)
+  // 初始化存储该实例对象的 Watcher 对象
   vm._watcher = null
+  // 标识当前实例对象是否处于非活动状态
+  // 一个 Vue 实例对象被创建后，如果这个实例对象没有被渲染到页面上
+  // 或者这个实例对象的父组件处于非活动状态，那么这个实例对象就被认为是非活动状态。
   vm._inactive = null
+  // 用于标识当前实例对象是否处于直接非活动状态。
+  // 直接非活动状态是指该组件自身被设置为不可见或禁用状态，而不是父组件处于非活动状态导致的。
   vm._directInactive = false
+  // 是否被挂载
   vm._isMounted = false
+  // 是否已销毁
   vm._isDestroyed = false
   vm._isBeingDestroyed = false
 }
