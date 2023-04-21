@@ -10,7 +10,12 @@ import {
 import { updateListeners } from '../vdom/helpers/index'
 
 export function initEvents(vm: Component) {
+  /**
+   * 组件的事件监听器对象，用于存储当前组件所有响应的事件
+   * 这个对象包含了所有已经定义的 v-on 监听器和通过 $on 方法动态添加的事件监听器。
+   */
   vm._events = Object.create(null)
+  // 有没设置vm.$on('hook:' + hook)这些hook，默认是没有
   vm._hasHookEvent = false
   // init parent attached events
   const listeners = vm.$options._parentListeners
@@ -44,6 +49,7 @@ export function updateComponentListeners(
   listeners: Object,
   oldListeners?: Object | null
 ) {
+  // 外部变量，暂存vm
   target = vm
   updateListeners(
     listeners,
