@@ -30,10 +30,12 @@ export function initProvide(vm: Component) {
 export function initInjections(vm: Component) {
   const result = resolveInject(vm.$options.inject, vm)
   if (result) {
+    // 不给观察
     toggleObserving(false)
     Object.keys(result).forEach(key => {
       /* istanbul ignore else */
       if (__DEV__) {
+        // 第四个参数是会放在setter里执行的，inject不给set所以要警告
         defineReactive(vm, key, result[key], () => {
           warn(
             `Avoid mutating an injected value directly since the changes will be ` +
@@ -43,9 +45,11 @@ export function initInjections(vm: Component) {
           )
         })
       } else {
+        // 其他模式不警告
         defineReactive(vm, key, result[key])
       }
     })
+    // 恢复观察
     toggleObserving(true)
   }
 }
