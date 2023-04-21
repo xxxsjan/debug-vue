@@ -59,7 +59,15 @@ export function createFnInvoker(
   invoker.fns = fns
   return invoker
 }
-
+/**
+ * 
+ * @param on 事件对象
+ * @param oldOn 旧的事件对象
+ * @param add $on
+ * @param remove $off
+ * @param createOnceHandler $once
+ * @param vm 实例
+ */
 export function updateListeners(
   on: Object,
   oldOn: Object,
@@ -69,9 +77,11 @@ export function updateListeners(
   vm: Component
 ) {
   let name, cur, old, event
+  // 枚举事件名
   for (name in on) {
-    cur = on[name]
-    old = oldOn[name]
+    cur = on[name] // 事件名对应的所有回调
+    old = oldOn[name]// 事件名对应的所有回调 旧的 
+    // 规范名字
     event = normalizeEvent(name)
     if (isUndef(cur)) {
       __DEV__ &&
