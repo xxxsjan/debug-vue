@@ -53,17 +53,20 @@ export function initState(vm: Component) {
   const opts = vm.$options
   if (opts.props) initProps(vm, opts.props)
 
-  // Composition API
+  // 初始化setup 因为是vue2.7了，所以会有setup出现
   initSetup(vm)
-
+  // 方法  处理命名问题，绑定this指向
   if (opts.methods) initMethods(vm, opts.methods)
+  // 数据
   if (opts.data) {
     initData(vm)
   } else {
     const ob = observe((vm._data = {}))
     ob && ob.vmCount++
   }
+  // 计算属性
   if (opts.computed) initComputed(vm, opts.computed)
+  // watch属性
   if (opts.watch && opts.watch !== nativeWatch) {
     initWatch(vm, opts.watch)
   }
@@ -277,9 +280,12 @@ function createGetterInvoker(fn) {
 }
 
 function initMethods(vm: Component, methods: Object) {
+  // 拿到父传过来的属性
   const props = vm.$options.props
   for (const key in methods) {
+    // 开发模式的友好警告
     if (__DEV__) {
+      // 警告：非函数类型
       if (typeof methods[key] !== 'function') {
         warn(
           `Method "${key}" has type "${typeof methods[
@@ -289,9 +295,11 @@ function initMethods(vm: Component, methods: Object) {
           vm
         )
       }
+      // 警告：props已经相同名字了
       if (props && hasOwn(props, key)) {
         warn(`Method "${key}" has already been defined as a prop.`, vm)
       }
+      // 警告：与实例上其他属性重名
       if (key in vm && isReserved(key)) {
         warn(
           `Method "${key}" conflicts with an existing Vue instance method. ` +
@@ -299,6 +307,7 @@ function initMethods(vm: Component, methods: Object) {
         )
       }
     }
+    // 不是函数就设置个空函数，是函数就把this指向当前组件实例
     vm[key] = typeof methods[key] !== 'function' ? noop : bind(methods[key], vm)
   }
 }

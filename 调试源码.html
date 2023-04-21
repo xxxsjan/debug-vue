@@ -26,7 +26,6 @@
       <div class="box"></div>
     </div>
     <script>
-      debugger;
       new Vue({
         el: "#demo",
         data: {
@@ -40,6 +39,9 @@
             }
             this.b = 666;
           },
+        },
+        beforeCreate() {
+          console.log("beforeCreate");
         },
       });
     </script>
