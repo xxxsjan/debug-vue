@@ -64,6 +64,8 @@ export function initState(vm: Component) {
     const ob = observe((vm._data = {}))
     ob && ob.vmCount++
   }
+  debugger
+
   // 计算属性
   if (opts.computed) initComputed(vm, opts.computed)
   // watch属性
@@ -163,7 +165,6 @@ function initData(vm: Component) {
       proxy(vm, `_data`, key)
     }
   }
-  debugger
   // 生成Observer放到自身__ob__上
   const ob = observe(data)
   ob && ob.vmCount++
@@ -185,20 +186,28 @@ export function getData(data: Function, vm: Component): any {
 const computedWatcherOptions = { lazy: true }
 
 function initComputed(vm: Component, computed: Object) {
-  // $flow-disable-line
+  // 获取计算属性相关的watcher
   const watchers = (vm._computedWatchers = Object.create(null))
+
   // computed properties are just getters during SSR
   const isSSR = isServerRendering()
-
+  // 枚举
   for (const key in computed) {
     const userDef = computed[key]
+    // 统一格式，使用getter
     const getter = isFunction(userDef) ? userDef : userDef.get
+    // 开发警告：computed无getter
     if (__DEV__ && getter == null) {
       warn(`Getter is missing for computed property "${key}".`, vm)
     }
-
+    // 非ssr
     if (!isSSR) {
-      // create internal watcher for the computed property.
+      // 为computed属性创建内部watcher
+      // vm: Component | null,
+      // expOrFn: string | (() => any),
+      // cb: Function,
+      // options?: WatcherOptions | null,
+      // isRenderWatcher?: boolean
       watchers[key] = new Watcher(
         vm,
         getter || noop,
@@ -211,8 +220,14 @@ function initComputed(vm: Component, computed: Object) {
     // component prototype. We only need to define computed properties defined
     // at instantiation here.
     if (!(key in vm)) {
+      // 设置描述器
+      // enumerable: true,
+      // configurable: true,
+      // get: userDef,
+      // set: noop
       defineComputed(vm, key, userDef)
     } else if (__DEV__) {
+      // 计算属性名字的检验，不能和实例上，$data,props,methods相同
       if (key in vm.$data) {
         warn(`The computed property "${key}" is already defined in data.`, vm)
       } else if (vm.$options.props && key in vm.$options.props) {
@@ -232,7 +247,9 @@ export function defineComputed(
   key: string,
   userDef: Record<string, any> | (() => any)
 ) {
+  // 默认缓存，ssr不缓存
   const shouldCache = !isServerRendering()
+  // 检验getter类型，需要是function
   if (isFunction(userDef)) {
     sharedPropertyDefinition.get = shouldCache
       ? createComputedGetter(key)

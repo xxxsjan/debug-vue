@@ -131,10 +131,12 @@ export default class Watcher implements DepTarget {
    * Evaluate the getter, and re-collect dependencies.
    */
   get() {
+    // targetStack栈追加当前实例watcher，Dep.target设置为当前实例watcher
     pushTarget(this)
     let value
     const vm = this.vm
     try {
+      // 这里调用会触发依赖收集
       value = this.getter.call(vm, vm)
     } catch (e: any) {
       if (this.user) {
@@ -145,9 +147,11 @@ export default class Watcher implements DepTarget {
     } finally {
       // "touch" every property so they are all tracked as
       // dependencies for deep watching
+      // 深度监听
       if (this.deep) {
         traverse(value)
       }
+      // targetStack栈上移除最后一个，也就是之前追加当前实例watcher，Dep.target设置为targetStack栈的最后一个
       popTarget()
       this.cleanupDeps()
     }
