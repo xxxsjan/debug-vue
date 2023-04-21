@@ -14,15 +14,16 @@ function Vue(options) {
   this._init(options)
 }
 
+// 一系列包装函数 Vue.prototype
 //@ts-expect-error Vue has function type
-initMixin(Vue)
+initMixin(Vue) // Vue.prototype._init
 //@ts-expect-error Vue has function type
-stateMixin(Vue)
+stateMixin(Vue) // Vue.prototype.$set $delete $watch
 //@ts-expect-error Vue has function type
-eventsMixin(Vue)
+eventsMixin(Vue) // Vue.prototype.$on $once $off $emit
 //@ts-expect-error Vue has function type
-lifecycleMixin(Vue)
+lifecycleMixin(Vue) // Vue.prototype._update $forceUpdate $destroy
 //@ts-expect-error Vue has function type
-renderMixin(Vue)
+renderMixin(Vue) // Vue.prototype.$nextTick _render
 
 export default Vue as unknown as GlobalAPI

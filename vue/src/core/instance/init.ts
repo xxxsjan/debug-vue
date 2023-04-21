@@ -82,6 +82,7 @@ export function initMixin(Vue: typeof Component) {
     // 初始化提供属性 在data/props之后
     initProvide(vm)
     // 生命周期created的执行时机
+    debugger
     callHook(vm, 'created')
 
     // vue框架做性能检测的相关代码  标记结束

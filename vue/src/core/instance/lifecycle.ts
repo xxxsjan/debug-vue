@@ -423,6 +423,8 @@ export function callHook(
       invokeWithErrorHandling(handlers[i], vm, args || null, vm, info)
     }
   }
+  // initEvents 时默认设置false
+  // 后续事件会通过$on函数（在eventsMixin）,会正则匹配/^hook:/，设置_hasHookEvent 为true
   if (vm._hasHookEvent) {
     vm.$emit('hook:' + hook)
   }

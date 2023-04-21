@@ -6,6 +6,7 @@ import { resolveProvided } from 'v3/apiInject'
 export function initProvide(vm: Component) {
   const provideOption = vm.$options.provide
   if (provideOption) {
+    // 格式化provide
     const provided = isFunction(provideOption)
       ? provideOption.call(vm)
       : provideOption
@@ -13,8 +14,8 @@ export function initProvide(vm: Component) {
       return
     }
     const source = resolveProvided(vm)
-    // IE9 doesn't support Object.getOwnPropertyDescriptors so we have to
-    // iterate the keys ourselves.
+    // IE9 不支持 Object.getOwnPropertyDescriptors 所以使用遍历
+    // 问题：为什么要拿出来再放进去
     const keys = hasSymbol ? Reflect.ownKeys(provided) : Object.keys(provided)
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]

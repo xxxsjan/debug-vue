@@ -20,8 +20,6 @@ dep主要就是用来在get时触发watcher的收集
 
 new Watcher时 watch的lazy默认为false，会执行get方法
 
-get方法
-
 get又会执行getter方法
 
 由于watch初始化时传入Watcher的expOrFn是key，是一个字符串

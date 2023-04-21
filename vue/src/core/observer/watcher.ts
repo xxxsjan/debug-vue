@@ -108,7 +108,6 @@ export default class Watcher implements DepTarget {
     this.depIds = new Set()
     this.newDepIds = new Set()
     this.expression = __DEV__ ? expOrFn.toString() : ''
-    debugger
     // parse expression for getter
     if (isFunction(expOrFn)) {
       // 计算属性时 expOrFn 会是函数
@@ -144,7 +143,6 @@ export default class Watcher implements DepTarget {
     let value
     const vm = this.vm
     try {
-      debugger
       // 这里调用会触发依赖收集
       value = this.getter.call(vm, vm)
     } catch (e: any) {
