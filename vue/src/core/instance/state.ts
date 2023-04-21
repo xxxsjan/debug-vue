@@ -64,11 +64,10 @@ export function initState(vm: Component) {
     const ob = observe((vm._data = {}))
     ob && ob.vmCount++
   }
-  debugger
-
   // 计算属性
   if (opts.computed) initComputed(vm, opts.computed)
   // watch属性
+  // 边缘情况排除：火狐Object.prototype上有个watch函数，nativeWatch = {}.watch
   if (opts.watch && opts.watch !== nativeWatch) {
     initWatch(vm, opts.watch)
   }
@@ -338,6 +337,13 @@ function initMethods(vm: Component, methods: Object) {
 
 function initWatch(vm: Component, watch: Object) {
   for (const key in watch) {
+    /**
+     * watch
+     * 写法1 watch:{ a:{ handler(){}, deep:true, immediate } }
+     * 写法2 watch:{ a(){}}   }
+     * 写法3 watch:{ a:[function(){}, function(){}] }
+     * 写法4 watch:{ b: "watchB",}  watchB是methods上的方法
+     */
     const handler = watch[key]
     if (isArray(handler)) {
       for (let i = 0; i < handler.length; i++) {
@@ -355,6 +361,7 @@ function createWatcher(
   handler: any,
   options?: Object
 ) {
+  // === '[object Object]'  初始化options 输出 { handler:Function }
   if (isPlainObject(handler)) {
     options = handler
     handler = handler.handler
@@ -362,6 +369,10 @@ function createWatcher(
   if (typeof handler === 'string') {
     handler = vm[handler]
   }
+  // 在 new Vue 之前，stateMixin 已经在原型上设置了$watch方法 具体实现就在下一个函数
+  // expOrFn 在组件时是watch的key的name,也可以是函数，具体是做什么的，还不知道
+  // handler 是watch回调，是个函数
+  // options是 { handler:Function,depp?:boolean, immediate?:boolean}
   return vm.$watch(expOrFn, handler, options)
 }
 
@@ -401,18 +412,23 @@ export function stateMixin(Vue: typeof Component) {
     options?: Record<string, any>
   ): Function {
     const vm: Component = this
+    // === '[object Object]' cb指watch的handler
     if (isPlainObject(cb)) {
+      // 交给createWatcher去处理cb是对象的情况，具体他会拿里面的handler再走进$watch
       return createWatcher(vm, expOrFn, cb, options)
     }
     options = options || {}
     options.user = true
+    // 创建watcher watch里面每个key都创建一个
     const watcher = new Watcher(vm, expOrFn, cb, options)
+    // 立即执行
     if (options.immediate) {
       const info = `callback for immediate watcher "${watcher.expression}"`
       pushTarget()
       invokeWithErrorHandling(cb, vm, [watcher.value], vm, info)
       popTarget()
     }
+    // 取消watch的函数
     return function unwatchFn() {
       watcher.teardown()
     }

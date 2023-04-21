@@ -59,6 +59,7 @@ export default class Dep {
   depend(info?: DebuggerEventExtraInfo) {
     if (Dep.target) {
       Dep.target.addDep(this)
+      // onTrack 是 Dep 对象上的一个方法，用来在依赖收集时执行某些操作
       if (__DEV__ && info && Dep.target.onTrack) {
         Dep.target.onTrack({
           effect: Dep.target,

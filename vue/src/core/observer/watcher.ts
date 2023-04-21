@@ -84,7 +84,7 @@ export default class Watcher implements DepTarget {
     if ((this.vm = vm) && isRenderWatcher) {
       vm._watcher = this
     }
-    // options
+    // options  计算属性时 lazy默认为true
     if (options) {
       this.deep = !!options.deep
       this.user = !!options.user
@@ -108,10 +108,15 @@ export default class Watcher implements DepTarget {
     this.depIds = new Set()
     this.newDepIds = new Set()
     this.expression = __DEV__ ? expOrFn.toString() : ''
+    debugger
     // parse expression for getter
     if (isFunction(expOrFn)) {
+      // 计算属性时 expOrFn 会是函数
       this.getter = expOrFn
     } else {
+      // 组件中watch初始化时 expOrFn 是key 也就是字符串
+      // 解析watch的key，可能会有 'obj.a' 的情况 ，生成getter
+      //  parsePath 主要就是根据解析，去访问对应属性，触发对象的get
       this.getter = parsePath(expOrFn)
       if (!this.getter) {
         this.getter = noop
@@ -124,18 +129,22 @@ export default class Watcher implements DepTarget {
           )
       }
     }
+    // 计算属性一开始不会有值
     this.value = this.lazy ? undefined : this.get()
   }
 
   /**
    * Evaluate the getter, and re-collect dependencies.
    */
+  // 普通watch初始化会直接走这里，进行依赖收集
   get() {
+    console.log('get')
     // targetStack栈追加当前实例watcher，Dep.target设置为当前实例watcher
     pushTarget(this)
     let value
     const vm = this.vm
     try {
+      debugger
       // 这里调用会触发依赖收集
       value = this.getter.call(vm, vm)
     } catch (e: any) {
@@ -198,12 +207,14 @@ export default class Watcher implements DepTarget {
    * Will be called when a dependency changes.
    */
   update() {
-    /* istanbul ignore else */
+    // 计算属性
     if (this.lazy) {
       this.dirty = true
     } else if (this.sync) {
+      // 用户设置同步选项
       this.run()
     } else {
+      // 默认情况
       queueWatcher(this)
     }
   }

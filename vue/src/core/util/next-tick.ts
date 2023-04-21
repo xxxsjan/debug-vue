@@ -10,10 +10,12 @@ const callbacks: Array<Function> = []
 let pending = false
 
 function flushCallbacks() {
+  // 改变状态
   pending = false
   const copies = callbacks.slice(0)
-  callbacks.length = 0
+  callbacks.length = 0 // 重置callbacks数组
   for (let i = 0; i < copies.length; i++) {
+    // 调用
     copies[i]()
   }
 }

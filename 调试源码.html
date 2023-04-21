@@ -37,12 +37,26 @@
             return this.a + this.b;
           },
         },
+        watch: {
+          a: [
+            function (newVal, oldVal) {
+              console.log("a changed1");
+            },
+            function (newVal, oldVal) {
+              console.log("a changed2");
+            },
+          ],
+          b: "watchB",
+        },
         methods: {
           tap() {
             for (let i = 0; i < 10; i++) {
               this.a = i;
             }
             this.b = 666;
+          },
+          watchB() {
+            console.log("b changed");
           },
         },
         beforeCreate() {
