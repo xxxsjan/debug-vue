@@ -37,7 +37,7 @@ export function initLifecycle(vm: Component) {
   // 找到最近一个非抽象的父级，把他设置为自己的parent
   // 抽象组件，是指一个不具体渲染任何内容的组件，它仅仅是用来提供共享的数据或方法给其他组件使用的
   let parent = options.parent
-  debugger
+
   if (parent && !options.abstract) {
     while (parent.$options.abstract && parent.$parent) {
       parent = parent.$parent
@@ -413,8 +413,11 @@ export function callHook(
   pushTarget()
   const prev = currentInstance
   setContext && setCurrentInstance(vm)
+  // 拿到组件的生命周期函数,是个数组
   const handlers = vm.$options[hook]
+
   const info = `${hook} hook`
+
   if (handlers) {
     for (let i = 0, j = handlers.length; i < j; i++) {
       invokeWithErrorHandling(handlers[i], vm, args || null, vm, info)

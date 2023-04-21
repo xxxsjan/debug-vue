@@ -49,6 +49,9 @@ export function initRender(vm: Component) {
 
   /* istanbul ignore else */
   if (__DEV__) {
+    // 开发模式下，第四个参数传一个函数
+    // 参数： 1组件，2属性key，3值 ，4 setter回调，5浅层，6mock
+    // $attrs来源parentData
     defineReactive(
       vm,
       '$attrs',
@@ -68,6 +71,7 @@ export function initRender(vm: Component) {
       true
     )
   } else {
+    // 开发模式下，第四个参数传null
     defineReactive(
       vm,
       '$attrs',
