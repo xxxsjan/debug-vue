@@ -17,6 +17,7 @@ const idToTemplate = cached(id => {
   return el && el.innerHTML
 })
 
+// full-dev用这个$mount
 const mount = Vue.prototype.$mount
 Vue.prototype.$mount = function (
   el?: string | Element,
