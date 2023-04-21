@@ -53,7 +53,9 @@ export class Observer {
     // this.value = value
     this.dep = mock ? mockDep : new Dep()
     this.vmCount = 0
+    // 定义__ob__属性，指向当前实例
     def(value, '__ob__', this)
+    // 如果是数组
     if (isArray(value)) {
       if (!mock) {
         if (hasProto) {
@@ -71,14 +73,18 @@ export class Observer {
         this.observeArray(value)
       }
     } else {
-      /**
-       * Walk through all properties and convert them into
-       * getter/setters. This method should only be called when
-       * value type is Object.
-       */
+      // 是对象
+      // defineProperty基于key，需要先拿到key  Object.keys返回自身可枚举属性组成的数组
       const keys = Object.keys(value)
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i]
+        //  obj: object,
+        // key: string,
+        // val?: any,
+        // customSetter?: Function | null,
+        // shallow?: boolean,
+        // mock?: boolean
+        // 每个key都有一个dep
         defineReactive(value, key, NO_INITIAL_VALUE, undefined, shallow, mock)
       }
     }
@@ -106,9 +112,19 @@ export function observe(
   shallow?: boolean,
   ssrMockReactivity?: boolean
 ): Observer | void {
+  // 判断是否已经是观察对象了
   if (value && hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     return value.__ob__
   }
+
+  /**
+   * shouldObserve  是这个函数是否创建观察者的总开关
+   * ssrMockReactivity：决定函数是否应该模拟响应式以进行服务器端渲染 默认false
+   * Object.isExtensible(value) 对象必需可扩展（可以在它上面添加新的属性）
+   * value.__v_skip 组件对象的话会有__v_skip这个属性，用于控制响应式系统是否跳过对象的观察
+   * isRef Ref类型的不需要观察
+   * !(value instanceof VNode) 不能是虚拟节点
+   */
   if (
     shouldObserve &&
     (ssrMockReactivity || !isServerRendering()) &&
@@ -118,6 +134,7 @@ export function observe(
     !isRef(value) &&
     !(value instanceof VNode)
   ) {
+    // 执行观察
     return new Observer(value, shallow, ssrMockReactivity)
   }
 }

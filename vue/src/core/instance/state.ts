@@ -123,8 +123,12 @@ function initProps(vm: Component, propsOptions: Object) {
 }
 
 function initData(vm: Component) {
+  // 拿到用户定义的data
   let data: any = vm.$options.data
+  // 是函数就执行，不是就直接用
+  // getData会触发依赖收集
   data = vm._data = isFunction(data) ? getData(data, vm) : data || {}
+  // data不是对象类型，说明之前是函数类型，但没有返回对象
   if (!isPlainObject(data)) {
     data = {}
     __DEV__ &&
@@ -134,10 +138,12 @@ function initData(vm: Component) {
         vm
       )
   }
+  // 最后data会处理成一个对象
   // proxy data on instance
   const keys = Object.keys(data)
   const props = vm.$options.props
   const methods = vm.$options.methods
+  // 命名检验
   let i = keys.length
   while (i--) {
     const key = keys[i]
@@ -157,7 +163,8 @@ function initData(vm: Component) {
       proxy(vm, `_data`, key)
     }
   }
-  // observe data
+  debugger
+  // 生成Observer放到自身__ob__上
   const ob = observe(data)
   ob && ob.vmCount++
 }

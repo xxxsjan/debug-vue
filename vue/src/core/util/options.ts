@@ -458,7 +458,9 @@ export function mergeOptions(
     }
   }
   function mergeField(key: any) {
+    // 使用strats上的合并方法，它上面有el data  watch computed  methods inject computed provide的父子合并方法、
     const strat = strats[key] || defaultStrat
+    // data属性会是一个 mergedInstanceDataFn函数
     options[key] = strat(parent[key], child[key], vm, key)
   }
   return options

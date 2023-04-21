@@ -68,20 +68,15 @@ export function initMixin(Vue: typeof Component) {
      *         _isMounted_isDestroyed _isBeingDestroyed
      */
     initLifecycle(vm)
-    debugger
     // 初始化组件实例事件
     initEvents(vm)
-    debugger
     // 初始化组件实例渲染  设置一些属性 _vnode _staticTrees $slots $scopedSlots _c $createElement
     initRender(vm)
-    debugger
     // 生命周期beforeCreate的执行时机
     // 参数： vm: Component,  hook: string, args?: any[],  setContext = true
     callHook(vm, 'beforeCreate', undefined, false /* setContext */)
-    debugger
     // 初始化注入属性  在data/props之前
     initInjections(vm)
-    debugger
     // 初始化data props
     initState(vm)
     // 初始化提供属性 在data/props之后
