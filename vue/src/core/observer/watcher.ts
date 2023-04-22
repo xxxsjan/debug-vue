@@ -131,6 +131,12 @@ export default class Watcher implements DepTarget {
     }
     // 计算属性一开始不会有值
     this.value = this.lazy ? undefined : this.get()
+    console.log(
+      'watcher表达式',
+      this.expression,
+      '是否渲染watcher',
+      !!isRenderWatcher
+    )
   }
 
   /**
@@ -214,7 +220,6 @@ export default class Watcher implements DepTarget {
       // 用户设置同步选项
       this.run()
     } else {
-      debugger
       // 默认情况
       queueWatcher(this)
     }

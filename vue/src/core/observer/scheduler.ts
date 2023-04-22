@@ -95,6 +95,7 @@ function flushSchedulerQueue() {
     }
     id = watcher.id
     has[id] = null
+    console.log('watcher.run', watcher.expression)
     watcher.run()
     // in dev build, check and stop circular updates.
     if (__DEV__ && has[id] != null) {
