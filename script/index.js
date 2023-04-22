@@ -23,7 +23,7 @@ const readmeContent = fs.readFileSync(path.join(__dirname, "./template.md"), {
 
 const replaceContent = mdList
   .map((item) => {
-    return `[${item.split(".")[1]}](./docs/${item})`;
+    return `[${item.split(".")[0]}](./docs/${item})`;
   })
   .join("\n\n");
 fs.writeFileSync(output, readmeContent.replace(reg, replaceContent), {
