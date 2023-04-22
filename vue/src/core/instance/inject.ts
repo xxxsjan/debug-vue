@@ -15,10 +15,13 @@ export function initProvide(vm: Component) {
     }
     const source = resolveProvided(vm)
     // IE9 不支持 Object.getOwnPropertyDescriptors 所以使用遍历
-    // 问题：为什么要拿出来再放进去
+    // Object.keys 只返回对象自身的可枚举属性，不包括继承的属性，
+    // Reflect.ownKeys 返回所有自身属性，包括不可枚举属性和 Symbol 类型的属性，也包括从原型链继承而来的属性。
+    // 为了确保拷贝的对象的属性是可枚举的，我们需要使用 Object.keys() 或 Reflect.ownKeys() 遍历 provided 对象的属性
     const keys = hasSymbol ? Reflect.ownKeys(provided) : Object.keys(provided)
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
+      // 问题：为什么要拿出来再放进去
       Object.defineProperty(
         source,
         key,

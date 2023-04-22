@@ -21,11 +21,19 @@ export function resolveProvided(vm: Component): Record<string, any> {
   // own provides object using parent provides object as prototype.
   // this way in `inject` we can simply look up injections from direct
   // parent and let the prototype chain do the work.
-  const existing = vm._provided
-  const parentProvides = vm.$parent && vm.$parent._provided
+
+  // initLifecycle时初始 vm._provided = parent ? parent._provided : Object.create(null)
+
+  const existing = vm._provided // 实例的提供对象_provided
+
+  const parentProvides = vm.$parent && vm.$parent._provided // 父组件的提供对象
+
+  // 判断两者是否一样
   if (parentProvides === existing) {
+    // 如果一样，当前实例只需以父组件的提供对象为原型创建新对象即可，并返回
     return (vm._provided = Object.create(parentProvides))
   } else {
+    // 如果不是，优先使用组件自己的提供对象，并返回
     return existing
   }
 }
