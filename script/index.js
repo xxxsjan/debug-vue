@@ -4,7 +4,6 @@ const fs = require("fs");
 
 const cwd = process.cwd();
 const docsPath = path.resolve(__dirname, "../docs");
-const mdList = getMdFiles();
 const reg = /<!--  -->/g;
 const output = path.resolve(__dirname, "../README.md");
 
@@ -20,6 +19,11 @@ function getMdFiles() {
 const readmeContent = fs.readFileSync(path.join(__dirname, "./template.md"), {
   encoding: "utf-8",
 });
+const mdList = getMdFiles();
+
+// console.log(mdList.sort());
+// console.log('mdList: ', mdList);
+// process.exit();
 
 const replaceContent = mdList
   .map((item) => {
