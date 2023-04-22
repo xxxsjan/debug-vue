@@ -26,9 +26,16 @@ const replaceContent = mdList
     return `[${item.split(".")[0]}](./docs/${item})`;
   })
   .join("\n\n");
-fs.writeFileSync(output, readmeContent.replace(reg, replaceContent), {
-  encoding: "utf-8",
-});
-
-console.log("已生成README.md：", output);
-process.exit();
+fs.writeFile(
+  output,
+  readmeContent.replace(reg, replaceContent),
+  {
+    encoding: "utf-8",
+  },
+  function (err) {
+    if (!err) {
+      console.log("已生成README.md：", output);
+      process.exit();
+    }
+  }
+);
