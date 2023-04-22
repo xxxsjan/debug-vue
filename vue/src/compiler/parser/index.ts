@@ -82,13 +82,17 @@ export function createASTElement(
 
 /**
  * Convert HTML string to AST.
+ * HTML字符串解析为AST
  */
 export function parse(template: string, options: CompilerOptions): ASTElement {
+  // 设置顶层warn变量为options定义的警告函数，没有就用默认的baseWarn
   warn = options.warn || baseWarn
-
+  // no是一个始终返回false的函数
+  //
   platformIsPreTag = options.isPreTag || no
   platformMustUseProp = options.mustUseProp || no
   platformGetTagNamespace = options.getTagNamespace || no
+
   const isReservedTag = options.isReservedTag || no
   maybeComponent = (el: ASTElement) =>
     !!(
@@ -100,7 +104,7 @@ export function parse(template: string, options: CompilerOptions): ASTElement {
   transforms = pluckModuleFunction(options.modules, 'transformNode')
   preTransforms = pluckModuleFunction(options.modules, 'preTransformNode')
   postTransforms = pluckModuleFunction(options.modules, 'postTransformNode')
-
+  // 分隔符
   delimiters = options.delimiters
 
   const stack: any[] = []
@@ -211,7 +215,7 @@ export function parse(template: string, options: CompilerOptions): ASTElement {
       )
     }
   }
-
+  // 正片开始 解析html
   parseHTML(template, {
     warn,
     expectHTML: options.expectHTML,
@@ -221,6 +225,7 @@ export function parse(template: string, options: CompilerOptions): ASTElement {
     shouldDecodeNewlinesForHref: options.shouldDecodeNewlinesForHref,
     shouldKeepComment: options.comments,
     outputSourceRange: options.outputSourceRange,
+    // 生成ast的开始回调
     start(tag, attrs, unary, start, end) {
       // check namespace.
       // inherit parent ns if there is one
@@ -312,7 +317,7 @@ export function parse(template: string, options: CompilerOptions): ASTElement {
         closeElement(element)
       }
     },
-
+    // 生成ast的结束回调
     end(tag, start, end) {
       const element = stack[stack.length - 1]
       // pop stack

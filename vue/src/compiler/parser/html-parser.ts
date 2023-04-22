@@ -75,13 +75,15 @@ export function parseHTML(html, options: HTMLParserOptions) {
   const canBeLeftOpenTag = options.canBeLeftOpenTag || no
   let index = 0
   let last, lastTag
+  // 开始
   while (html) {
     last = html
     // Make sure we're not in a plaintext content element like script/style
     if (!lastTag || !isPlainTextElement(lastTag)) {
+      // 找第一个<
       let textEnd = html.indexOf('<')
       if (textEnd === 0) {
-        // Comment:
+        // Comment:注释标签
         if (comment.test(html)) {
           const commentEnd = html.indexOf('-->')
 
@@ -97,7 +99,10 @@ export function parseHTML(html, options: HTMLParserOptions) {
             continue
           }
         }
-
+        // 匹配 /^<!\[/
+        // <![if !IE]>
+        // <link href="non-ie.css" rel="stylesheet">
+        // <![endif]>
         // https://en.wikipedia.org/wiki/Conditional_comment#Downlevel-revealed_conditional_comment
         if (conditionalComment.test(html)) {
           const conditionalEnd = html.indexOf(']>')
@@ -108,14 +113,14 @@ export function parseHTML(html, options: HTMLParserOptions) {
           }
         }
 
-        // Doctype:
+        // Doctype:/^<!DOCTYPE [^>]+>/i
         const doctypeMatch = html.match(doctype)
         if (doctypeMatch) {
           advance(doctypeMatch[0].length)
           continue
         }
 
-        // End tag:
+        // End tag:结束标签
         const endTagMatch = html.match(endTag)
         if (endTagMatch) {
           const curIndex = index
@@ -124,11 +129,14 @@ export function parseHTML(html, options: HTMLParserOptions) {
           continue
         }
 
-        // Start tag:
+        // Start tag:开始标签
         const startTagMatch = parseStartTag()
         if (startTagMatch) {
+          // 处理 匹配到的开始标签的结果
           handleStartTag(startTagMatch)
+          //  tagName && pre,textarea中的一个 && html[0] === '\n' 标签是否是pre,textarea，且第一个是\n
           if (shouldIgnoreFirstNewline(startTagMatch.tagName, html)) {
+            // 是的话消费1
             advance(1)
           }
           continue
@@ -207,21 +215,28 @@ export function parseHTML(html, options: HTMLParserOptions) {
   // Clean up any remaining tags
   parseEndTag()
 
+  // 管理html长度，入参是消费长度
   function advance(n) {
     index += n
     html = html.substring(n)
   }
 
   function parseStartTag() {
+    // 开始标签
     const start = html.match(startTagOpen)
     if (start) {
+      // 匹配到是开始标签
+      // 存起来：匹配到的标签名和对应索引
       const match: any = {
         tagName: start[1],
         attrs: [],
         start: index
       }
+      // start[0].length消费的长度 advance回去处理html已经消费的长度
       advance(start[0].length)
+      // 继续下一步解析  end是开始标签关闭的时机  attr是match返回的结果，是标签属性
       let end, attr
+      // 还没遇到开始标签的结束位置的话，继续消费字符串解析，把属性存到attrs数组
       while (
         !(end = html.match(startTagClose)) &&
         (attr = html.match(dynamicArgAttribute) || html.match(attribute))
@@ -235,6 +250,7 @@ export function parseHTML(html, options: HTMLParserOptions) {
         match.unarySlash = end[1]
         advance(end[0].length)
         match.end = index
+        // 返回这次匹配到的开始标签及其属性的结果
         return match
       }
     }
@@ -275,6 +291,7 @@ export function parseHTML(html, options: HTMLParserOptions) {
     }
 
     if (!unary) {
+      // 追加结果
       stack.push({
         tag: tagName,
         lowerCasedTag: tagName.toLowerCase(),
@@ -286,6 +303,7 @@ export function parseHTML(html, options: HTMLParserOptions) {
     }
 
     if (options.start) {
+      // 把结果传出去，外面会生成ast
       options.start(tagName, attrs, unary, match.start, match.end)
     }
   }

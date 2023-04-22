@@ -74,24 +74,32 @@ export function initLifecycle(vm: Component) {
 export function lifecycleMixin(Vue: typeof Component) {
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
+    // 旧dom节点
     const prevEl = vm.$el
+    // 旧节点
     const prevVnode = vm._vnode
+    // 闭包变量 指向当前实例 表示活跃实例，函数返回一个函数，活跃实例恢复设置为之前的
     const restoreActiveInstance = setActiveInstance(vm)
+    // 新节点
     vm._vnode = vnode
+    // 新旧对比
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
     if (!prevVnode) {
-      // initial render
+      // 首次渲染
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
     } else {
-      // updates
+      // 更新
       vm.$el = vm.__patch__(prevVnode, vnode)
     }
+    // 页面到这里已经更新了 调用restoreActiveInstance 设置活跃实例为之前的
     restoreActiveInstance()
+    //
     // update __vue__ reference
     if (prevEl) {
       prevEl.__vue__ = null
     }
+    // 更新dom的__vue__值为当前实例
     if (vm.$el) {
       vm.$el.__vue__ = vm
     }
@@ -191,6 +199,7 @@ export function mountComponent(
   let updateComponent
   /* istanbul ignore if */
   if (__DEV__ && config.performance && mark) {
+    // 性能分析相关
     updateComponent = () => {
       const name = vm._name
       const id = vm._uid
@@ -209,6 +218,8 @@ export function mountComponent(
     }
   } else {
     updateComponent = () => {
+      // vm._render()生成vnode在实例上 期间会收集依赖
+      // vm._update 拿到虚拟节点，新旧对比渲染
       vm._update(vm._render(), hydrating)
     }
   }
@@ -220,7 +231,7 @@ export function mountComponent(
       }
     }
   }
-
+  // 开发模式, 追加追踪的生命周期
   if (__DEV__) {
     watcherOptions.onTrack = e => callHook(vm, 'renderTracked', [e])
     watcherOptions.onTrigger = e => callHook(vm, 'renderTriggered', [e])
@@ -229,6 +240,12 @@ export function mountComponent(
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+  // 参数
+  // vm: Component | null,
+  // expOrFn: 现在是updateComponent，更新组件的函数，调用_render,
+  // cb: 空函数,  watcher.run执行的回调
+  // options?: watcherOptions
+  // isRenderWatcher?: 是渲染watcher 会设置vm._watcher
   new Watcher(
     vm,
     updateComponent,

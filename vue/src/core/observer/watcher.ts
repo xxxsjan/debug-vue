@@ -111,6 +111,7 @@ export default class Watcher implements DepTarget {
     // parse expression for getter
     if (isFunction(expOrFn)) {
       // 计算属性时 expOrFn 会是函数
+      // 渲染组件时 也是函数 updateComponent
       this.getter = expOrFn
     } else {
       // 组件中watch初始化时 expOrFn 是key 也就是字符串
@@ -137,13 +138,14 @@ export default class Watcher implements DepTarget {
    */
   // 普通watch初始化会直接走这里，进行依赖收集
   get() {
-    console.log('get')
     // targetStack栈追加当前实例watcher，Dep.target设置为当前实例watcher
     pushTarget(this)
     let value
     const vm = this.vm
     try {
       // 这里调用会触发依赖收集
+      // watch就是调用解析obj.a读取属性达到收集
+      // 渲染组件时 getter是 updateComponent函数 调用_render
       value = this.getter.call(vm, vm)
     } catch (e: any) {
       if (this.user) {
@@ -212,6 +214,7 @@ export default class Watcher implements DepTarget {
       // 用户设置同步选项
       this.run()
     } else {
+      debugger
       // 默认情况
       queueWatcher(this)
     }

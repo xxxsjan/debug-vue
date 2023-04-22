@@ -22,11 +22,15 @@ export function optimize(
   options: CompilerOptions
 ) {
   if (!root) return
+
   isStaticKey = genStaticKeysCached(options.staticKeys || '')
+
   isPlatformReservedTag = options.isReservedTag || no
-  // first pass: mark all non-static nodes.
+
+  // first pass: 标记所有非静态节点
   markStatic(root)
-  // second pass: mark static roots.
+
+  // second pass:标记静态根
   markStaticRoots(root, false)
 }
 

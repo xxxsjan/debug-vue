@@ -17,7 +17,7 @@ function createFunction(code, errors) {
     return noop
   }
 }
-
+// 初始解析template会走进这里
 export function createCompileToFunctionFn(compile: Function): Function {
   const cache = Object.create(null)
 
@@ -26,16 +26,21 @@ export function createCompileToFunctionFn(compile: Function): Function {
     options?: CompilerOptions,
     vm?: Component
   ): CompiledFunctionResult {
+    // extend 把options的key枚举到{}，类似Object.assign
     options = extend({}, options)
+    // 无值设置空函数
     const warn = options.warn || baseWarn
+    // 取消options对warn的引用
     delete options.warn
 
+    // 开发警告：存在 Content Security Policy（CSP）限制
     /* istanbul ignore if */
     if (__DEV__) {
       // detect possible CSP restriction
       try {
         new Function('return 1')
       } catch (e: any) {
+        // e.toString().match(/unsafe-eval|CSP/) 用于检测异常信息是否包含 "unsafe-eval" 或 "CSP" 字符串
         if (e.toString().match(/unsafe-eval|CSP/)) {
           warn(
             'It seems you are using the standalone build of Vue.js in an ' +
@@ -52,6 +57,7 @@ export function createCompileToFunctionFn(compile: Function): Function {
     const key = options.delimiters
       ? String(options.delimiters) + template
       : template
+    // 使用缓存  --key为dom字符串
     if (cache[key]) {
       return cache[key]
     }

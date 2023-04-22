@@ -172,8 +172,14 @@ export function defineReactive(
     enumerable: true,
     configurable: true,
     get: function reactiveGetter() {
+      console.log('get', obj, key)
       const value = getter ? getter.call(obj) : val
       if (Dep.target) {
+        // @ts-ignore
+        if (Dep.target.vm._watcher) {
+          console.log('渲染watcher')
+          debugger
+        }
         // 依赖收集
         if (__DEV__) {
           dep.depend({

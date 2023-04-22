@@ -108,6 +108,7 @@ export function renderMixin(Vue: typeof Component) {
     const vm: Component = this
     const { render, _parentVnode } = vm.$options
 
+    // 存在父级虚拟节点 且 当前组件已经加载
     if (_parentVnode && vm._isMounted) {
       vm.$scopedSlots = normalizeScopedSlots(
         vm.$parent!,
@@ -129,8 +130,15 @@ export function renderMixin(Vue: typeof Component) {
       // There's no need to maintain a stack because all render fns are called
       // separately from one another. Nested component's render fns are called
       // when parent component is patched.
+      // 设置当前实例，这是一个闭包变量，指向当前组件实例
       setCurrentInstance(vm)
+      // 又是一个闭包变量，指向当前正在渲染的组件实例
       currentRenderingInstance = vm
+
+      // _renderProxy在初始化_init时，赋值为vm  开发模式会代理
+      // vm.$createElement为渲染函数，平常render函数的形参h也是指他，提供生成HTMLElement的能力
+      // render输出虚拟节点
+      debugger
       vnode = render.call(vm._renderProxy, vm.$createElement)
     } catch (e: any) {
       handleError(e, vm, `render`)
@@ -152,6 +160,7 @@ export function renderMixin(Vue: typeof Component) {
         vnode = vm._vnode
       }
     } finally {
+      // 清除
       currentRenderingInstance = null
       setCurrentInstance()
     }
