@@ -87,9 +87,11 @@ isRenderWatcher boolean，是否是渲染Watcher
 
 组件watch时，会出现，比如
 
+expOrFn就是'obj.a'
+
 ```
 watch:{
-'obj.a':function(){}
+ 'obj.a':function(){}
 }
 ```
 
@@ -97,14 +99,14 @@ watch:{
 
 计算属性或者渲染watcher时会出现
 
-```
+```javascript
 computed
 // 为computed属性创建内部watcher
 watchers[key] = new Watcher(
-        vm,
-        getter || noop,
-        noop,
-        computedWatcherOptions
+ vm,
+ getter || noop,
+ noop,
+ computedWatcherOptions
 )
 渲染watcher时
 new Watcher(

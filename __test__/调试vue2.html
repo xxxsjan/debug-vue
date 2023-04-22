@@ -5,38 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script src="./vue/dist/vue.js"></script>
+    <script src="../vue/dist/vue.js"></script>
     <style></style>
   </head>
   <body>
-    <div id="demo">
+    <div id="app">
       <div>aaaaaa--{{a}}</div>
       <div>bbbbbb--{{b}}</div>
       <button @click="tap">tap</button>
     </div>
     <script>
       new Vue({
-        el: "#demo",
+        el: "#app",
         data: {
           a: 0,
           b: 1,
         },
-        computed: {
-          c() {
-            return this.a + this.b;
-          },
-        },
-        watch: {
-          a: [
-            function (newVal, oldVal) {
-              console.log("a changed1");
-            },
-            function (newVal, oldVal) {
-              console.log("a changed2");
-            },
-          ],
-          b: "watchB",
-        },
+        computed: {},
         methods: {
           tap() {
             for (let i = 0; i < 10; i++) {
@@ -44,12 +29,6 @@
             }
             this.b = 666;
           },
-          watchB() {
-            console.log("b changed");
-          },
-        },
-        beforeCreate() {
-          console.log("beforeCreate");
         },
       });
     </script>
