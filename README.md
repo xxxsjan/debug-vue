@@ -6,8 +6,8 @@
 
 ## 部分
 
-[md](./docs/Observer-Dep-Watcher做了什么.md)
+[Observer-Dep-Watcher做了什么](./docs/Observer-Dep-Watcher做了什么.md)
 
-[md](./docs/Watcher的种类.md)
+[Watcher的种类](./docs/Watcher的种类.md)
 
-[md](./docs/数据更新怎么更新视图的.md)
+[数据更新怎么更新视图的](./docs/数据更新怎么更新视图的.md)
