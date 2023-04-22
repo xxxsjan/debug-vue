@@ -13,6 +13,7 @@ export function initProvide(vm: Component) {
     if (!isObject(provided)) {
       return
     }
+    // 解析vm._provided 返回
     const source = resolveProvided(vm)
     // IE9 不支持 Object.getOwnPropertyDescriptors 所以使用遍历
     // Object.keys 只返回对象自身的可枚举属性，不包括继承的属性，
