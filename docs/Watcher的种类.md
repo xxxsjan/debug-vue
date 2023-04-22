@@ -75,10 +75,11 @@ class Watcher {
 }
 ```
 
-根据expOrFn isRenderWatcher 两个参数可知
+主要差异在于expOrFn isRenderWatcher 两个参数
 
-expOrFn 可为字符串或者函数
-isRenderWatcher 布尔值，是否渲染Watcher
+expOrFn string | function
+
+isRenderWatcher boolean，是否是渲染Watcher
 
 ## expOrFn
 
