@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="../core/packages/vue/dist/vue.global.js"></script>
+    <style></style>
+  </head>
+  <body>
+    <div id="demo">
+      <div>aaaaaa--{{a}}</div>
+      <div>bbbbbb--{{b}}</div>
+      <button @click="tap">tap</button>
+    </div>
+    <script>
+      // core\packages\vue\src\index.ts
+      // core\packages\runtime-dom\src\index.ts
+      const { createApp, toRefs, reactive } = Vue;
+      const app = createApp({
+        setup() {
+          const state = reactive({
+            a: 0,
+            b: 1,
+          });
+          function tap() {
+            for (let i = 0; i < 10; i++) {
+              state.a = i;
+            }
+            state.b = 666;
+          }
+          return {
+            tap,
+            ...toRefs(state),
+          };
+        },
+      });
+      app.mount("#demo");
+    </script>
+  </body>
+</html>
