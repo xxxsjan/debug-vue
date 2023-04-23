@@ -255,6 +255,7 @@ export function mountComponent(
   )
   hydrating = false
 
+  // 立刻执行_preWatchers里的watcher
   // flush buffer for flush: "pre" watchers queued in setup()
   const preWatchers = vm._preWatchers
   if (preWatchers) {

@@ -3,8 +3,9 @@
 ## 脚本引用时
 
 - initMixin(Vue)  
-  - Vue.prototype._init
-
+  
+- Vue.prototype._init
+  
 - stateMixin(Vue)  
   - Object.defineProperty(Vue.prototype, '$data', dataDef)
   - Object.defineProperty(Vue.prototype, '$props', propsDef)
@@ -17,14 +18,54 @@
   - Vue.prototype.$once
   - Vue.prototype.$off
   - Vue.prototype.$emit
+  
 - lifecycleMixin(Vue)  
   - Vue.prototype._update
   - Vue.prototype.$forceUpdate
   - Vue.prototype.$destroy
+  
 - renderMixin(Vue)  
+  
+  - installRenderHelpers(Vue.prototype)  vue\src\core\instance\render-helpers\index.ts
+  
+    -  Vue.prototype._o = markOnce
+  
+       Vue.prototype._n = toNumber
+    
+       Vue.prototype._s = toString
+    
+       Vue.prototype._l = renderList
+    
+       Vue.prototype._t = renderSlot
+    
+       Vue.prototype._q = looseEqual
+    
+       Vue.prototype._i = looseIndexOf
+    
+       Vue.prototype._m = renderStatic
+    
+       Vue.prototype._f = resolveFilter
+    
+       Vue.prototype._k = checkKeyCodes
+    
+       Vue.prototype._b = bindObjectProps
+    
+       Vue.prototype._v = createTextVNode
+    
+       Vue.prototype._e = createEmptyVNode
+    
+       Vue.prototype._u = resolveScopedSlots
+    
+       Vue.prototype._g = bindObjectListeners
+    
+       Vue.prototype._d = bindDynamicKeys
+    
+       Vue.prototype._p = prependModifier
+    
   - Vue.prototype.$nextTick
+  
   - Vue.prototype._render
-
+  
 - initGlobalAPI(Vue)
   - Object.defineProperty(Vue, 'config', configDef)
   - Vue.util
@@ -43,9 +84,13 @@
     - Vue.extend
   - initAssetRegisters(Vue)
     - Vue['component', 'directive', 'filter']
+  
 - Object.defineProperty Vue.prototype, '$isServer'
+
 - Object.defineProperty Vue.prototype, '$ssrContext'
+
 - Object.defineProperty Vue, 'FunctionalRenderContext',
+
 - Vue.version
 
 ## new Vue
