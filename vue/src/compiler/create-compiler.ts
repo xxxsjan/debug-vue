@@ -72,6 +72,9 @@ export function createCompilerCreator(baseCompile: Function): Function {
       }
 
       finalOptions.warn = warn
+
+      // 前面一堆都是生成finalOptions
+
       // 调用baseCompile，拿到解析结果
       const compiled = baseCompile(template.trim(), finalOptions)
 
