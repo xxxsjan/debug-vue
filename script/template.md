@@ -2,7 +2,7 @@
 
 ## 文件
 
-[入口](./vue/src/core/instance/index.ts)
+[入口](./vue/src/core/index.ts)
 
 ## 部分
 
