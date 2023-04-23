@@ -107,7 +107,6 @@ export function renderMixin(Vue: typeof Component) {
   Vue.prototype._render = function (): VNode {
     const vm: Component = this
     const { render, _parentVnode } = vm.$options
-
     // 存在父级虚拟节点 且 当前组件已经加载
     if (_parentVnode && vm._isMounted) {
       vm.$scopedSlots = normalizeScopedSlots(

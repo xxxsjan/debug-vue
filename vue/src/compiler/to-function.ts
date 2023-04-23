@@ -64,7 +64,7 @@ export function createCompileToFunctionFn(compile: Function): Function {
 
     // compile
     const compiled = compile(template, options)
-
+    debugger
     // check compilation errors/tips
     if (__DEV__) {
       if (compiled.errors && compiled.errors.length) {
@@ -97,7 +97,9 @@ export function createCompileToFunctionFn(compile: Function): Function {
     // turn code into functions
     const res: any = {}
     const fnGenErrors: any[] = []
+    // 函数体转函数 new Function(code)
     res.render = createFunction(compiled.render, fnGenErrors)
+    // 静态render转成函数list
     res.staticRenderFns = compiled.staticRenderFns.map(code => {
       return createFunction(code, fnGenErrors)
     })
