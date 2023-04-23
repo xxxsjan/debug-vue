@@ -4,7 +4,7 @@
 
 [入口](./vue/src/core/index.ts)
 
-## 部分
+## 文档
 
 [api时间线](./docs/api时间线.md)
 
