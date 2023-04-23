@@ -55,7 +55,10 @@
           },
         },
         created() {
-          console.log("created");
+          console.log("-----created");
+        },
+        beforeUpdate() {
+          console.log("-----beforeUpdate");
         },
       });
     </script>
