@@ -36,6 +36,12 @@
             },
           ],
           b: "watchB",
+          c: {
+            handler() {
+              console.log("c");
+            },
+            immediate: true,
+          },
         },
         methods: {
           tap() {
@@ -47,6 +53,9 @@
           watchB() {
             console.log("b changed");
           },
+        },
+        created() {
+          console.log("created");
         },
       });
     </script>

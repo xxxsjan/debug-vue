@@ -425,6 +425,7 @@ export function stateMixin(Vue: typeof Component) {
     if (options.immediate) {
       const info = `callback for immediate watcher "${watcher.expression}"`
       pushTarget()
+      // 调用错误捕获 cb可以是watch的handler 第三个 参数就是watcher的旧值
       invokeWithErrorHandling(cb, vm, [watcher.value], vm, info)
       popTarget()
     }

@@ -65,7 +65,7 @@ export function initMixin(Vue: typeof Component) {
      * 初始vm的$parent $refs
      *         _provided _watcher
      *         _inactive _directInactive
-     *         _isMounted_isDestroyed _isBeingDestroyed
+     *         _isMounted _isDestroyed _isBeingDestroyed
      */
     initLifecycle(vm)
     // 初始化组件实例事件
