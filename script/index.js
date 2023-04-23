@@ -38,7 +38,7 @@ fs.writeFile(
   },
   function (err) {
     if (!err) {
-      console.log("已生成README.md：", output);
+      console.log("update:README.md  ", output);
       process.exit();
     }
   }

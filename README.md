@@ -2,9 +2,11 @@
 
 ## 文件
 
-[入口](./vue/src/core/instance/index.ts)
+[入口](./vue/src/core/index.ts)
 
 ## 部分
+
+[api时间线](./docs/api时间线.md)
 
 [Observer-Dep-Watcher做了什么](./docs/Observer-Dep-Watcher做了什么.md)
 
