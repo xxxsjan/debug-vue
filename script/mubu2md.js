@@ -1,9 +1,8 @@
 const fs = require("fs");
 const path = require("path");
-const html = fs.readFileSync("./vue2-api时间线.html", "utf-8");
-// 引入jsdom模块
 const { JSDOM } = require("jsdom");
 
+const html = fs.readFileSync("./vue2-api时间线.html", "utf-8");
 const dom = new JSDOM(html);
 
 const document = dom.window.document;

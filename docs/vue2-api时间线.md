@@ -86,37 +86,33 @@
   - callHook(vm, 'beforeCreate', undefined, false)------------------beforeCreate
   - initInjections(vm)
   - initState(vm)
+    - initProps
+      - vm._props
+      - vm.$options._propKeys
+      - proxy(vm, `_props`, key)
+    - initSetup
+    - initData
+      - getData
+        - --vm.$options.data转 对象
+      - proxy(vm, `_data`, key)
+        - --代理vm，从_data获取值、
+        - Object.defineProperty(target, key, sharedPropertyDefinition)
+      - observe(data)
+        - --vm._data添加__ob__
+        - new Observer(value, shallow, ssrMockReactivity)
+    - initComputed
+      - 不同写法的计算属性的get统一赋值到getter
+      - vm._computedWatchers
+      - new Watcher( vm, getter || noop, noop, computedWatcherOptions )
+      - defineComputed(vm, key, userDef)
+        - 定义vm实例读取计算属性只能读不能写，读取函数其实就是计算属性的get
+    - initWatch
+      - createWatcher(vm, key, handler)
+        - vm.$watch(expOrFn, handler, options)       expOrFn是字符串  handler是watch的回调
+          - new Watcher(vm, expOrFn, cb, options)   cb是handler
+          - 如果是immediate执行invokeWithErrorHandling(cb, vm, [watcher.value], vm, info)
+          - 返回 function unwatchFn() { watcher.teardown() }
   - initProvide(vm)
   - callHook(vm, 'created')-----------------------------------------------------created
   - vm.$mount(vm.$options.el)
-    - template 格式化
-      - idToTemplate
-      - getOuterHTML(el)
-    - {render, staticRenderFns} = compileToFunctions(template,options,this)
-      - 高阶函数不好说 具体：vue\src\platforms\web\runtime-with-compiler.ts
-      - 主要就是拿到了render函数，render函数可以返回vnode
-      - 具体步骤
-        - 调用createCompileToFunctionFn ，有闭包维护缓存  const cache = Object.create(null)
-        - createCompileToFunctionFn 里面调用compile函数
-        - compile函数先生成finalOptions
-        - compile里面继续调用baseCompile(template.trim(), finalOptions)返回compiled （结果）
-          - baseCompile 里 调用 parse(template.trim(), options) 生成 AST
-          - baseCompile 里 调用generate(ast, options) 生成 code:{staticRenderFns:[], render:"with(this){...}"}
-          - baseCompile 返回 {ast,  render: code.render,  staticRenderFns: code.staticRenderFns}
-            - parse具体流程
-            - 调用parseHTML解析template字符串，每遇到开始 结束标签，触发回调，回调会处理生成结果，最后返回
-      - compileToFunctions会基于compile的结果做字符串转函数的操作
-    - mount.call(this, el, hydrating)
-      - mountComponent(this, el, hydrating)
-        - vm.$options.render
-        - callHook(vm, 'beforeMount')----------------------------------------------------------callHook
-        - new Watcher(vm,updateComponent,noop,watcherOptions,true)
-          - updateComponent
-            - 执行vm._update(vm._render(), hydrating)
-            - vm._render()
-              - vnode = render.call(vm._renderProxy, vm.$createElement)
-              - render作用输出虚拟节点
-        - ? vm._preWatchers
-          - preWatchers[i].run()
-        - callHook(vm, 'mounted')-----------------------------------------------------------------mounted
 
