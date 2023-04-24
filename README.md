@@ -6,9 +6,9 @@
 
 ## 文档
 
-[api时间线](./docs/api时间线.md)
-
 [Observer-Dep-Watcher做了什么](./docs/Observer-Dep-Watcher做了什么.md)
+
+[vue2-api时间线](./docs/vue2-api时间线.md)
 
 [Watcher的种类](./docs/Watcher的种类.md)
 
