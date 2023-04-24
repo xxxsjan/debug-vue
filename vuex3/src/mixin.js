@@ -23,10 +23,12 @@ export default function (Vue) {
     const options = this.$options
     // store injection
     if (options.store) {
+      // 根上会有store
       this.$store = typeof options.store === 'function'
         ? options.store()
         : options.store
     } else if (options.parent && options.parent.$store) {
+      // 其他组件只需沿着parent获取即可
       this.$store = options.parent.$store
     }
   }

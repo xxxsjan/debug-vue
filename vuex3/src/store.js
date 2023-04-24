@@ -24,8 +24,8 @@ export class Store {
       plugins = [],
       strict = false
     } = options
-
-    // store internal state
+     
+    // store 内部 state
     this._committing = false
     this._actions = Object.create(null)
     this._actionSubscribers = []
@@ -37,7 +37,7 @@ export class Store {
     this._watcherVM = new Vue()
     this._makeLocalGettersCache = Object.create(null)
 
-    // bind commit and dispatch to self
+    // 改变this指向到实例，store就是实例，有react class组件内味了
     const store = this
     const { dispatch, commit } = this
     this.dispatch = function boundDispatch (type, payload) {
@@ -49,7 +49,7 @@ export class Store {
 
     // strict mode
     this.strict = strict
-
+    // 调取模块收集的根state的引用
     const state = this._modules.root.state
 
     // init root module.
@@ -61,7 +61,7 @@ export class Store {
     // (also registers _wrappedGetters as computed properties)
     resetStoreVM(this, state)
 
-    // apply plugins
+    // 使用plugins
     plugins.forEach(plugin => plugin(this))
 
     const useDevtools = options.devtools !== undefined ? options.devtools : Vue.config.devtools
@@ -279,19 +279,23 @@ function resetStore (store, hot) {
 }
 
 function resetStoreVM (store, state, hot) {
+  // 取出旧的vue实例
   const oldVm = store._vm
 
   // bind store public getters
   store.getters = {}
-  // reset local getters cache
+  // 重置本地getters缓存
   store._makeLocalGettersCache = Object.create(null)
   const wrappedGetters = store._wrappedGetters
+  // 处理计算属性
   const computed = {}
+  // 回调拿到wrappedGetters的value 和key，fn===wrappedGetters[key]
   forEachValue(wrappedGetters, (fn, key) => {
     // use computed to leverage its lazy-caching mechanism
     // direct inline function use will lead to closure preserving oldVm.
     // using partial to return function with only arguments preserved in closure environment.
     computed[key] = partial(fn, store)
+     
     Object.defineProperty(store.getters, key, {
       get: () => store._vm[key],
       enumerable: true // for local getters
@@ -327,12 +331,22 @@ function resetStoreVM (store, state, hot) {
     Vue.nextTick(() => oldVm.$destroy())
   }
 }
-
+/**
+ * 
+ * @param {*} store 当前实例
+ * @param {*} rootState 根state
+ * @param {Array} path []
+ * @param {Module} module 哪个模块
+ * @param {*} hot 
+ */
 function installModule (store, rootState, path, module, hot) {
+  // root标识
   const isRoot = !path.length
+  // 获取命名空间名字
   const namespace = store._modules.getNamespace(path)
 
-  // register in namespace map
+  // 注册命名空间
+  // 配置了 namespaced: true,就把module这个模块方法 store上的_modulesNamespaceMap上，namespace作为key
   if (module.namespaced) {
     if (store._modulesNamespaceMap[namespace] && __DEV__) {
       console.error(`[vuex] duplicate namespace ${namespace} for the namespaced module ${path.join('/')}`)
@@ -342,7 +356,9 @@ function installModule (store, rootState, path, module, hot) {
 
   // set state
   if (!isRoot && !hot) {
+    // 获取父级数据 比如['a','b'] => this.state.a.b
     const parentState = getNestedState(rootState, path.slice(0, -1))
+    // 最后一个模块的名字
     const moduleName = path[path.length - 1]
     store._withCommit(() => {
       if (__DEV__) {

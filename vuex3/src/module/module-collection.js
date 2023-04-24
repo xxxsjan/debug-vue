@@ -2,6 +2,10 @@ import Module from './module'
 import { assert, forEachValue } from '../util'
 
 export default class ModuleCollection {
+  /**
+   * 
+   * @param {*} rawRootModule Store的options
+   */
   constructor (rawRootModule) {
     // register root module (Vuex.Store options)
     this.register([], rawRootModule, false)

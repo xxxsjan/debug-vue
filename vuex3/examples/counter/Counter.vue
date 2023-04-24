@@ -20,6 +20,9 @@ export default {
     'decrement',
     'incrementIfOdd',
     'incrementAsync'
-  ])
+  ]),
+  mounted() {
+    console.log(this.$store)
+  },
 }
 </script>
