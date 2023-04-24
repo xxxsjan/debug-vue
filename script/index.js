@@ -2,7 +2,7 @@ const fg = require("fast-glob");
 const path = require("path");
 const fs = require("fs");
 
-const { exec, execSync } = require("child_process");
+const execa = require("execa");
 const execPath = path.resolve(process.cwd(), "..");
 
 const cwd = process.cwd();
@@ -47,17 +47,15 @@ fs.writeFile(
     }
   }
 );
-function runCommands() {
+async function runCommands() {
   const opt = { cwd: execPath };
-  try {
-    const stdout = execSync("git status", opt);
-    if (`${stdout}`.indexOf("README.md") > -1) {
-      try {
-        const stdout = execSync("git add README.md", opt);
-        console.log(`stdout of command1: ${stdout}`);
-        const stdout2 = execSync('git commit -m "update:README.md"', opt);
-        console.log(`stdout of command1: ${stdout2}`);
-      } catch (error) {}
-    }
-  } catch (error) {}
+  const res = await execa("git", ["status"], opt);
+  if (res.stdout.indexOf("README.md") > -1) {
+    const res2 = await execa("git", ["add", "README.md"], opt);
+    const res3 = await execa(
+      "git",
+      ["commit", "-m", '"update:README.md"'],
+      opt
+    );
+  }
 }
