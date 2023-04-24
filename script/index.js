@@ -49,13 +49,18 @@ fs.writeFile(
 );
 async function runCommands() {
   const opt = { cwd: execPath };
+  console.log("command run at ", execPath);
   const res = await execa("git", ["status"], opt);
   if (res.stdout.indexOf("README.md") > -1) {
+    console.log("success run: git status");
     const res2 = await execa("git", ["add", "README.md"], opt);
+    console.log("success run: git add README.md");
+
     const res3 = await execa(
       "git",
       ["commit", "-m", '"update:README.md"'],
       opt
     );
+    console.log("success run: git commit");
   }
 }
