@@ -71,3 +71,4 @@ ${res}
 }
 const output = path.resolve(__dirname, "../docs/vue2-api时间线.md");
 fs.writeFileSync(output, mubu2md(), "utf-8");
+console.log('update:vue2-api时间线.md');

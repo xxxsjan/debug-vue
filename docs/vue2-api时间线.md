@@ -115,4 +115,34 @@
   - initProvide(vm)
   - callHook(vm, 'created')-----------------------------------------------------created
   - vm.$mount(vm.$options.el)
+    - template 格式化
+      - idToTemplate
+      - getOuterHTML(el)
+    - {render, staticRenderFns} = compileToFunctions(template,options,this)
+      - 高阶函数不好说 具体：vue\src\platforms\web\runtime-with-compiler.ts
+      - 主要就是拿到了render函数，render函数可以返回vnode
+      - 具体步骤
+        - 调用createCompileToFunctionFn ，有闭包维护缓存  const cache = Object.create(null)
+        - createCompileToFunctionFn 里面调用compile函数
+        - compile函数先生成finalOptions
+        - compile里面继续调用baseCompile(template.trim(), finalOptions)返回compiled （结果）
+          - baseCompile 里 调用 parse(template.trim(), options) 生成 AST
+          - baseCompile 里 调用generate(ast, options) 生成 code:{staticRenderFns:[], render:"with(this){...}"}
+          - baseCompile 返回 {ast,  render: code.render,  staticRenderFns: code.staticRenderFns}
+            - parse具体流程
+            - 调用parseHTML解析template字符串，每遇到开始 结束标签，触发回调，回调会处理生成结果，最后返回
+      - compileToFunctions会基于compile的结果做字符串转函数的操作
+    - mount.call(this, el, hydrating)
+      - mountComponent(this, el, hydrating)
+        - vm.$options.render
+        - callHook(vm, 'beforeMount')----------------------------------------------------------callHook
+        - new Watcher(vm,updateComponent,noop,watcherOptions,true)
+          - updateComponent
+            - 执行vm._update(vm._render(), hydrating)
+            - vm._render()
+              - vnode = render.call(vm._renderProxy, vm.$createElement)
+              - render作用输出虚拟节点
+        - ? vm._preWatchers
+          - preWatchers[i].run()
+        - callHook(vm, 'mounted')-----------------------------------------------------------------mounted
 
