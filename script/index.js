@@ -2,6 +2,9 @@ const fg = require("fast-glob");
 const path = require("path");
 const fs = require("fs");
 
+const { exec, execSync } = require("child_process");
+const execPath = path.resolve(process.cwd(), "..");
+
 const cwd = process.cwd();
 const docsPath = path.resolve(__dirname, "../docs");
 const reg = /<!--  -->/g;
@@ -30,6 +33,7 @@ const replaceContent = mdList
     return `[${item.split(".")[0]}](./docs/${item})`;
   })
   .join("\n\n");
+
 fs.writeFile(
   output,
   readmeContent.replace(reg, replaceContent),
@@ -39,7 +43,21 @@ fs.writeFile(
   function (err) {
     if (!err) {
       console.log("update:README.md  ", output);
-      process.exit();
+      runCommands();
     }
   }
 );
+function runCommands() {
+  const opt = { cwd: execPath };
+  try {
+    const stdout = execSync("git status", opt);
+    if (`${stdout}`.indexOf("README.md") > -1) {
+      try {
+        const stdout = execSync("git add README.md", opt);
+        console.log(`stdout of command1: ${stdout}`);
+        const stdout2 = execSync('git commit -m "update:README.md"', opt);
+        console.log(`stdout of command1: ${stdout2}`);
+      } catch (error) {}
+    }
+  } catch (error) {}
+}
