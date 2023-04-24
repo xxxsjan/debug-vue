@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fast-glob": "^3.2.12"
+    "domutils": "^3.0.1",
+    "fast-glob": "^3.2.12",
+    "htmlparser2": "^8.0.2",
+    "jsdom": "^21.1.1"
   }
 }
