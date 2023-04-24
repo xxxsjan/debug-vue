@@ -218,12 +218,13 @@ function initComputed(vm: Component, computed: Object) {
     // component-defined computed properties are already defined on the
     // component prototype. We only need to define computed properties defined
     // at instantiation here.
+    // 不在vm实例上同名的属性才可以defineComputed
     if (!(key in vm)) {
       // 设置描述器
       // enumerable: true,
       // configurable: true,
       // get: userDef,
-      // set: noop
+      // set: noop  不允许设置
       defineComputed(vm, key, userDef)
     } else if (__DEV__) {
       // 计算属性名字的检验，不能和实例上，$data,props,methods相同
@@ -342,7 +343,7 @@ function initWatch(vm: Component, watch: Object) {
      * 写法1 watch:{ a:{ handler(){}, deep:true, immediate } }
      * 写法2 watch:{ a(){}}   }
      * 写法3 watch:{ a:[function(){}, function(){}] }
-     * 写法4 watch:{ b: "watchB",}  watchB是methods上的方法
+     * 写法4 watch:{ b: "watchB", }  watchB是methods上的方法
      */
     const handler = watch[key]
     if (isArray(handler)) {
