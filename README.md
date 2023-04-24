@@ -10,6 +10,8 @@
 
 [vue2-api时间线](./docs/vue2-api时间线.md)
 
+[vuex3](./docs/vuex3.md)
+
 [Watcher的种类](./docs/Watcher的种类.md)
 
 [数据更新怎么更新视图的](./docs/数据更新怎么更新视图的.md)
