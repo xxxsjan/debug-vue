@@ -6,11 +6,13 @@
 
 ## 文档
 
+[mounted之前都做了什么](./docs/mounted之前都做了什么.md)
+
 [Observer-Dep-Watcher做了什么](./docs/Observer-Dep-Watcher做了什么.md)
 
 [vue2-api时间线](./docs/vue2-api时间线.md)
 
-[vuex3](./docs/vuex3.md)
+[vuex3分析](./docs/vuex3分析.md)
 
 [Watcher的种类](./docs/Watcher的种类.md)
 
