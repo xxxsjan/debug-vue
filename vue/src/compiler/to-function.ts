@@ -64,7 +64,6 @@ export function createCompileToFunctionFn(compile: Function): Function {
 
     // compile
     const compiled = compile(template, options)
-    debugger
     // check compilation errors/tips
     if (__DEV__) {
       if (compiled.errors && compiled.errors.length) {

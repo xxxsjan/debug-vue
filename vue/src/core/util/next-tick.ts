@@ -106,10 +106,12 @@ export function nextTick(cb?: (...args: any[]) => any, ctx?: object) {
       _resolve(ctx)
     }
   })
+  // 如果没在等待状态，就执行异步函数，执行回调队列
   if (!pending) {
     pending = true
     timerFunc()
   }
+  // 如果用户没传cb 就返回一个Promise
   // $flow-disable-line
   if (!cb && typeof Promise !== 'undefined') {
     return new Promise(resolve => {

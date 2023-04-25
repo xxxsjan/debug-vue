@@ -72,14 +72,17 @@ export default class Dep {
   notify(info?: DebuggerEventExtraInfo) {
     // stabilize the subscriber list first
     const subs = this.subs.filter(s => s) as DepTarget[]
+    // 按watcher id升序排序subs
     if (__DEV__ && !config.async) {
       // subs aren't sorted in scheduler if not running async
       // we need to sort them now to make sure they fire in correct
       // order
       subs.sort((a, b) => a.id - b.id)
     }
+    // 执行watcher update方法
     for (let i = 0, l = subs.length; i < l; i++) {
       const sub = subs[i]
+      // 如果是开发模式，可能会有onTrigger回调，要执行
       if (__DEV__ && info) {
         sub.onTrigger &&
           sub.onTrigger({

@@ -91,6 +91,7 @@ function flushSchedulerQueue() {
   for (index = 0; index < queue.length; index++) {
     watcher = queue[index]
     if (watcher.before) {
+      // 渲染watcher 是 callHook(vm, 'beforeUpdate')
       watcher.before()
     }
     id = watcher.id
@@ -116,7 +117,7 @@ function flushSchedulerQueue() {
   // keep copies of post queues before resetting state
   const activatedQueue = activatedChildren.slice()
   const updatedQueue = queue.slice()
-
+  debugger
   resetSchedulerState()
 
   // call component updated and activated hooks
@@ -190,11 +191,12 @@ export function queueWatcher(watcher: Watcher) {
   // queue the flush
   if (!waiting) {
     waiting = true
-
+    // 在开发模式下同步地刷新调度队列
     if (__DEV__ && !config.async) {
       flushSchedulerQueue()
       return
     }
+    // 生成模式走这个（默认）
     nextTick(flushSchedulerQueue)
   }
 }

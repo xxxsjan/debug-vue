@@ -168,6 +168,7 @@ export default class Watcher implements DepTarget {
       }
       // targetStack栈上移除最后一个，也就是之前追加当前实例watcher，Dep.target设置为targetStack栈的最后一个
       popTarget()
+      // 将当前观察者的依赖列表与先前的依赖列表进行比较，以删除任何未使用的观察者和响应式依赖项
       this.cleanupDeps()
     }
     return value
@@ -210,7 +211,7 @@ export default class Watcher implements DepTarget {
 
   /**
    * Subscriber interface.
-   * Will be called when a dependency changes.
+   * 依赖更新是触发update，根据不同配置项做不同操作
    */
   update() {
     // 计算属性

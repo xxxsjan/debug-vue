@@ -148,7 +148,7 @@ export function defineReactive(
   val?: any,
   customSetter?: Function | null,
   shallow?: boolean,
-  mock?: boolean
+  mock?: boolean // 用于指示是否在属性 getter 函数中模拟一个值，以便在测试时使用。
 ) {
   const dep = new Dep()
 
@@ -173,12 +173,13 @@ export function defineReactive(
     configurable: true,
     get: function reactiveGetter() {
       // console.log('get', obj, key)
+      // 读取最新值
       const value = getter ? getter.call(obj) : val
       if (Dep.target) {
         // @ts-ignore
-        // if (Dep.target.vm._watcher) {
-        //   console.log('渲染watcher')
-        // }
+        if (Dep.target.vm._watcher) {
+          console.log('渲染watcher')
+        }
         // 依赖收集
         if (__DEV__) {
           dep.depend({
@@ -199,13 +200,19 @@ export function defineReactive(
       return isRef(value) && !shallow ? value.value : value
     },
     set: function reactiveSetter(newVal) {
+      // 当设置数据时
+      console.log('set:', obj, key)
+      // 获取新值  getter在响应式一开始就已经拿到描述器上的getter
       const value = getter ? getter.call(obj) : val
+      // 判断值是否改变
       if (!hasChanged(value, newVal)) {
         return
       }
+      // 自定义setter
       if (__DEV__ && customSetter) {
         customSetter()
       }
+      // 设置值
       if (setter) {
         setter.call(obj, newVal)
       } else if (getter) {
@@ -217,7 +224,9 @@ export function defineReactive(
       } else {
         val = newVal
       }
+      // 如果是深度响应的，对于新值要实现响应式
       childOb = !shallow && observe(newVal, false, mock)
+      // 依赖触发notify，通知watcher
       if (__DEV__) {
         dep.notify({
           type: TriggerOpTypes.SET,
