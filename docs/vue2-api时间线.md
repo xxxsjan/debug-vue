@@ -4,6 +4,8 @@
 
 ## 脚本引用时
 
+- 
+- 
 - initMixin(Vue)
 - Vue.prototype._init
 - stateMixin(Vue)
