@@ -4,13 +4,16 @@
 
 ## 脚本引用时
 
-- 
-- 
+- vue\src\platforms\web\runtime\index.ts
+  - Vue.prototype.__patch__
+  - Vue.prototype.$mount
 - initMixin(Vue)
 - Vue.prototype._init
 - stateMixin(Vue)
   - Object.defineProperty(Vue.prototype, '$data', dataDef)
+    - 定义$data 数据读取来源于_data,不可写入
   - Object.defineProperty(Vue.prototype, '$props', propsDef)
+    - 定义$props数据读取来源于_props,不可写入
   - Vue.prototype.$set
   - Vue.prototype.$delete
   - Vue.prototype.$watch
@@ -79,12 +82,34 @@
     - ? initInternalComponent(vm, options as any)
     - : vm.$options --mergeOptions
   - vm._renderProxy
-    - = vm
-    - initProxy(vm)
+    - |= vm
+    - |=initProxy(vm)
   - vm._self
   - initLifecycle(vm)
+    - vm.$parent
+    - vm.$root
+    - vm.$children = []
+    - vm.$refs = {}
+    - vm._provided
+    - vm._watcher = null
+    - vm._inactive = null
+    - vm._directInactive = false
+    - vm._isMounted = false
+    - vm._isDestroyed = false
+    - vm._isBeingDestroyed = false
   - initEvents(vm)
+    - vm._events
+    - vm._hasHookEvent = false  vm.$on('hook:' + hook)
   - initRender(vm)
+    - vm._vnode = null
+    - vm._staticTrees = null
+    - vm.$vnode = options._parentVnode
+    - vm.$slots
+    - vm.$scopedSlots
+    - vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
+    - vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
+    - defineReactive( vm, '$attrs', (parentData && parentData.attrs) || emptyObject, null, true )
+    - defineReactive( vm, '$listeners', options._parentListeners || emptyObject, null, true )
   - callHook(vm, 'beforeCreate', undefined, false)------------------beforeCreate
   - initInjections(vm)
   - initState(vm)
@@ -138,13 +163,72 @@
       - mountComponent(this, el, hydrating)
         - vm.$options.render
         - callHook(vm, 'beforeMount')----------------------------------------------------------callHook
-        - new Watcher(vm,updateComponent,noop,watcherOptions,true)
-          - updateComponent
+        - 设置watcherOptions before  这里是后续数据更新的beforeUpdate
+        - new Watcher(vm,updateComponent,noop,watcherOptions,true)  --渲染watcher
+          - updateComponent   初始new就直接调用了，后续数据变通过实例update-nexttick-before-run-get-getter触发调用
             - 执行vm._update(vm._render(), hydrating)
             - vm._render()
               - vnode = render.call(vm._renderProxy, vm.$createElement)
               - render作用输出虚拟节点
+            - vm._update
+              - 首次渲染？vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
+              - 二次更新？vm.$el = vm.__patch__(prevVnode, vnode)
         - ? vm._preWatchers
           - preWatchers[i].run()
         - callHook(vm, 'mounted')-----------------------------------------------------------------mounted
+
+## 数据更新时
+
+- Object.defineProperty 对应key 的set触发
+  - 调用getter判断新值是否有改变
+  - customSetter&&customSetter()
+  - 设置新值
+    - ?setter&&setter.call(obj, newVal)
+    - ?ref对象 =>value.value = newVal
+    - ?基础类型=> val = newVal
+  - childOb = !shallow && observe(newVal, false, mock) 如果是深度响应的，对于新值要实现响应式
+  - dep.notify()   依赖触发notify，通知watcher
+    - const subs = this.subs.filter(s => s)
+    - sub.update()
+      - 三种情况
+        - this.dirty = true  计算属性
+        - this.run()   用户设置了需要同步执行
+        - queueWatcher(this)  默认情况，放队列里
+          - queue.push(watcher)  维护queue队列
+          - 执行flushSchedulerQueue()
+            - 情况1：__DEV__ && !config.async 就直接执行flushSchedulerQueue()
+            - 情况2： nextTick(flushSchedulerQueue) （一般情况）
+              - 维护callbacks--收集回调
+                - !pending && timerFunc() 如果没在等待状态，就执行异步函数，执行回调队列
+                  - 优雅降级策略
+                  - p.then(flushCallbacks)
+                  - new MutationObserver(flushCallbacks)
+                  - setImmediate(flushCallbacks)
+                  - setTimeout(flushCallbacks, 0)
+            - 开始执行flushSchedulerQueue（同步或异步的最终调用）
+              - 遍历queue执行
+                - watcher.before()
+                  - callHook(vm, 'beforeUpdate')  -----------------------------------beforeUpdate
+                - watcher.run()
+                  - const value = this.get() 调用get获取value
+                    - pushTarget(this)
+                    - 调用this.getter  普通watcher会是读取属性，渲染watcher这里getter会是updataComponent
+                    - popTarget()
+                    - this.cleanupDeps() 将当前观察者的依赖列表与先前的依赖列表进行比较，以删除任何未使用的观察者和响应式依赖项
+                - resetSchedulerState()
+                  - 重置
+                  - index = queue.length = activatedChildren.length = 0;
+                  - has = {};
+                  - circular = {};
+                  - waiting = flushing = false
+                - callActivatedHooks(activatedQueue)
+                  - 遍历执行
+                  - queue[i]._inactive = true 设置状态
+                  - activateChildComponent(queue[i], true /* true */)
+                    - callHook(vm, 'activated')
+                - callUpdatedHooks(updatedQueue)
+                  - const vm = watcher.vm
+                  - vm && vm._watcher === watcher && vm._isMounted && !vm._isDestroyed  ==> callHook(vm, 'updated')--------------------updated
+                - cleanupDeps()
+                  - 遍历pendingCleanupDeps 设置dep._pending = false
 
