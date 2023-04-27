@@ -3,9 +3,8 @@ const execa = require("execa");
 const execPath = path.resolve(process.cwd(), "..");
 
 (async () => {
-  const res = await execa("dir", [], {
+  const res = await execa("git", ["status"], {
     cwd: execPath,
   });
-  //   console.log(stdout);
   console.log(res);
 })();

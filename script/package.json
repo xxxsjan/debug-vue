@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "gen:readme": "node ./index.js",
-    "mubu": "node ./mubu2md.js"
+    "mubu": "node ./mubu2md.js",
+    "get-git-diff-status": "node get-git-diff-status"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,7 @@
   "dependencies": {
     "execa": "^5.1.1",
     "fast-glob": "^3.2.12",
+    "git-diff-tree": "^1.1.0",
     "jsdom": "^21.1.1"
   }
 }
