@@ -12,6 +12,8 @@
 
 [vue2-api时间线](./docs/vue2-api时间线.md)
 
+[vue2-v-model过程](./docs/vue2-v-model过程.md)
+
 [vuex3分析](./docs/vuex3分析.md)
 
 [Watcher的种类](./docs/Watcher的种类.md)
