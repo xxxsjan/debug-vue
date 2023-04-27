@@ -117,7 +117,6 @@ function flushSchedulerQueue() {
   // keep copies of post queues before resetting state
   const activatedQueue = activatedChildren.slice()
   const updatedQueue = queue.slice()
-  debugger
   resetSchedulerState()
 
   // call component updated and activated hooks

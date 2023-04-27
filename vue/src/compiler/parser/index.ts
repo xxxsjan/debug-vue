@@ -85,6 +85,7 @@ export function createASTElement(
  * HTML字符串解析为AST
  */
 export function parse(template: string, options: CompilerOptions): ASTElement {
+  debugger
   // 设置顶层warn变量为options定义的警告函数，没有就用默认的baseWarn
   warn = options.warn || baseWarn
   // no是一个始终返回false的函数
@@ -423,6 +424,8 @@ export function parse(template: string, options: CompilerOptions): ASTElement {
       }
     }
   })
+  debugger
+
   return root
 }
 

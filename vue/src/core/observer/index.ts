@@ -172,6 +172,7 @@ export function defineReactive(
     enumerable: true,
     configurable: true,
     get: function reactiveGetter() {
+      // debugger
       // console.log('get', obj, key)
       // 读取最新值
       const value = getter ? getter.call(obj) : val

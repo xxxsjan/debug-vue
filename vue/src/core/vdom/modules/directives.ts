@@ -20,12 +20,14 @@ function updateDirectives(oldVnode: VNodeWithData, vnode: VNodeWithData) {
 }
 
 function _update(oldVnode, vnode) {
+  debugger
   const isCreate = oldVnode === emptyNode
   const isDestroy = vnode === emptyNode
   const oldDirs = normalizeDirectives(
     oldVnode.data.directives,
     oldVnode.context
   )
+  // 格式化，格式统一，因为支持写法多种
   const newDirs = normalizeDirectives(vnode.data.directives, vnode.context)
 
   const dirsWithInsert: any[] = []
@@ -51,7 +53,7 @@ function _update(oldVnode, vnode) {
       }
     }
   }
-
+  // 执行当前组件所有指令的Insert  inserted函数
   if (dirsWithInsert.length) {
     const callInsert = () => {
       for (let i = 0; i < dirsWithInsert.length; i++) {
@@ -64,7 +66,7 @@ function _update(oldVnode, vnode) {
       callInsert()
     }
   }
-
+  // 执行当前组件所有指令的Postpatch componentUpdated函数
   if (dirsWithPostpatch.length) {
     mergeVNodeHook(vnode, 'postpatch', () => {
       for (let i = 0; i < dirsWithPostpatch.length; i++) {
@@ -103,11 +105,12 @@ function normalizeDirectives(
     }
     res[getRawDirName(dir)] = dir
     if (vm._setupState && vm._setupState.__sfc) {
-      const setupDef = dir.def || resolveAsset(vm, '_setupState', 'v-' + dir.name)
+      const setupDef =
+        dir.def || resolveAsset(vm, '_setupState', 'v-' + dir.name)
       if (typeof setupDef === 'function') {
         dir.def = {
           bind: setupDef,
-          update: setupDef,
+          update: setupDef
         }
       } else {
         dir.def = setupDef
