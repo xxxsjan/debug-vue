@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "gen:readme": "node ./index.js",
+    "update:readme": "node ./index.js",
     "mubu": "node ./mubu2md.js",
     "get-git-diff-status": "node get-git-diff-status"
   },
