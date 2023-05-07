@@ -850,6 +850,7 @@ export function createPatchFunction(backend) {
         const parentElm = nodeOps.parentNode(oldElm)
 
         // create new node
+        // 创建元素节点
         createElm(
           vnode,
           insertedVnodeQueue,
@@ -892,6 +893,7 @@ export function createPatchFunction(backend) {
 
         // destroy old node
         if (isDef(parentElm)) {
+          // 移除旧节点
           removeVnodes([oldVnode], 0, 0)
         } else if (isDef(oldVnode.tag)) {
           invokeDestroyHook(oldVnode)

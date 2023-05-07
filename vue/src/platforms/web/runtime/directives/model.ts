@@ -22,7 +22,6 @@ if (isIE9) {
 
 const directive = {
   inserted(el, binding, vnode, oldVnode) {
-    debugger
     if (vnode.tag === 'select') {
       // #6903
       if (oldVnode.elm && !oldVnode.elm._vOptions) {

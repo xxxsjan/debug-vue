@@ -15,6 +15,7 @@ export const createCompiler = createCompilerCreator(function baseCompile(
 
   // 解析生成ast
   const ast = parse(template.trim(), options)
+  debugger
   // 优化ast  添加静态节点标识
   if (options.optimize !== false) {
     optimize(ast, options)

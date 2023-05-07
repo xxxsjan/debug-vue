@@ -50,6 +50,7 @@ export function _createElement(
   children?: any,
   normalizationType?: number
 ): VNode | Array<VNode> {
+  debugger
   if (isDef(data) && isDef((data as any).__ob__)) {
     __DEV__ &&
       warn(

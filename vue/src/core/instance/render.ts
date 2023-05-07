@@ -137,7 +137,6 @@ export function renderMixin(Vue: typeof Component) {
       // _renderProxy在初始化_init时，赋值为vm  开发模式会代理
       // vm.$createElement为渲染函数，平常render函数的形参h也是指他，提供生成HTMLElement的能力
       // render输出虚拟节点
-      debugger
       vnode = render.call(vm._renderProxy, vm.$createElement)
     } catch (e: any) {
       handleError(e, vm, `render`)

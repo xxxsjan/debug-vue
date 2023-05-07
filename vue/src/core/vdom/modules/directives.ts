@@ -20,7 +20,6 @@ function updateDirectives(oldVnode: VNodeWithData, vnode: VNodeWithData) {
 }
 
 function _update(oldVnode, vnode) {
-  debugger
   const isCreate = oldVnode === emptyNode
   const isDestroy = vnode === emptyNode
   const oldDirs = normalizeDirectives(
