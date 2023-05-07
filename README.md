@@ -14,6 +14,8 @@
 
 [vue2-v-model过程](./docs/vue2-v-model过程.md)
 
+[vue2使用原生onkeyup的问题](./docs/vue2使用原生onkeyup的问题.md)
+
 [vuex3分析](./docs/vuex3分析.md)
 
 [Watcher的种类](./docs/Watcher的种类.md)
