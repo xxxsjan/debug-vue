@@ -66,16 +66,21 @@ export const createApp = ((...args) => {
   const app = ensureRenderer().createApp(...args)
 
   if (__DEV__) {
+    // 注入判断标签是否原生名称的函数app.config['isNativeTag']
     injectNativeTagCheck(app)
+    // 对于app.config, 上的'isCustomElement' 和 'compilerOptions' 属性 get 和set时 注入警告信息
     injectCompilerOptionsCheck(app)
   }
 
   const { mount } = app
+  debugger
   app.mount = (containerOrSelector: Element | ShadowRoot | string): any => {
+    // 格式化挂载节点为dom类型
     const container = normalizeContainer(containerOrSelector)
     if (!container) return
 
     const component = app._component
+    // 如果不是函数
     if (!isFunction(component) && !component.render && !component.template) {
       // __UNSAFE__
       // Reason: potential execution of JS expressions in in-DOM template.
@@ -163,7 +168,7 @@ function injectCompilerOptionsCheck(app: App) {
       `- For vue-loader: pass it via vue-loader's \`compilerOptions\` loader option.\n` +
       `- For vue-cli: see https://cli.vuejs.org/guide/webpack.html#modifying-options-of-a-loader\n` +
       `- For vite: pass it via @vitejs/plugin-vue options. See https://github.com/vitejs/vite/tree/main/packages/plugin-vue#example-for-passing-options-to-vuecompiler-dom`
-
+    // 插入警告
     Object.defineProperty(app.config, 'compilerOptions', {
       get() {
         warn(msg)

@@ -34,7 +34,22 @@
     "build-compiler-cjs": "node scripts/build.js compiler reactivity-transform shared -af cjs",
     "build-runtime-esm": "node scripts/build.js runtime reactivity shared -af esm-bundler && node scripts/build.js vue -f esm-bundler-runtime && node scripts/build.js vue -f esm-browser-runtime",
     "build-ssr-esm": "node scripts/build.js compiler-sfc server-renderer -f esm-browser",
-    "build-sfc-playground-self": "cd packages/sfc-playground && npm run build"
+    "build-sfc-playground-self": "cd packages/sfc-playground && npm run build",
+    "preinstall": "node ./scripts/preinstall.js",
+    "postinstall": "simple-git-hooks"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged && pnpm check",
+    "commit-msg": "node scripts/verifyCommit.js"
+  },
+  "lint-staged": {
+    "*.{js,json}": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "eslint",
+      "prettier --parser=typescript --write"
+    ]
   },
   "engines": {
     "node": ">=16.11.0"

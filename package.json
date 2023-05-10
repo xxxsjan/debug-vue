@@ -1,0 +1,23 @@
+{
+  "name": "vue-source-code-comment",
+  "version": "1.0.0",
+  "description": "[入口](./vue/src/core/index.ts)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xxxsjan/vue-source-code-comment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xxxsjan/vue-source-code-comment/issues"
+  },
+  "homepage": "https://github.com/xxxsjan/vue-source-code-comment#readme"
+}
