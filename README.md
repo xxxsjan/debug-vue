@@ -12,9 +12,13 @@
 
 [vue2-api时间线](./docs/vue2-api时间线.md)
 
+[vue2-nextTick](./docs/vue2-nextTick.md)
+
 [vue2-v-model过程](./docs/vue2-v-model过程.md)
 
 [vue2使用原生onkeyup的问题](./docs/vue2使用原生onkeyup的问题.md)
+
+[vue3-时间线](./docs/vue3-时间线.md)
 
 [vuex3分析](./docs/vuex3分析.md)
 
