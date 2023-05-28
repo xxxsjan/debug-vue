@@ -2,7 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const { JSDOM } = require("jsdom");
 
-const html = fs.readFileSync("./vue2-api时间线.html", "utf-8");
+const htmlPath = path.resolve(__dirname, "./vue2-api时间线.html");
+const html = fs.readFileSync(htmlPath, "utf-8");
 const dom = new JSDOM(html);
 
 const document = dom.window.document;
@@ -69,6 +70,6 @@ function mubu2md() {
 ${res}
 `;
 }
-const output = path.resolve(__dirname, "../docs/vue2-api时间线.md");
+const output = path.resolve(__dirname, "../../docs/vue2-api时间线.md");
 fs.writeFileSync(output, mubu2md(), "utf-8");
-console.log('update:vue2-api时间线.md');
+console.log("update:vue2-api时间线.md");
