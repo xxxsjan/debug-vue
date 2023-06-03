@@ -105,13 +105,16 @@ export function _createElement(
           context
         )
       }
+
       vnode = new VNode(
-        config.parsePlatformTagName(tag),
-        data,
-        children,
-        undefined,
-        undefined,
-        context
+        config.parsePlatformTagName(tag) /** tag?: string **/,
+        data /** data?: VNodeData **/,
+        children /** children?: Array<VNode> | null **/,
+        undefined /** text?: string **/,
+        undefined /** elm?: Node **/,
+        context /** context?: Component **/
+        /** componentOptions?: VNodeComponentOptions, */
+        /** asyncFactory?: Function */
       )
     } else if (
       (!data || !data.pre) &&

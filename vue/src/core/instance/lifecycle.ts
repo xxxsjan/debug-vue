@@ -220,6 +220,7 @@ export function mountComponent(
     updateComponent = () => {
       // vm._render()生成vnode在实例上 期间会收集依赖
       // vm._update 拿到虚拟节点，新旧对比渲染
+      // debugger
       vm._update(vm._render(), hydrating)
     }
   }

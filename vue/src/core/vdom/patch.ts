@@ -127,6 +127,7 @@ export function createPatchFunction(backend) {
     ownerArray?: any,
     index?: any
   ) {
+    debugger
     if (isDef(vnode.elm) && isDef(ownerArray)) {
       // This vnode was used in a previous render!
       // now it's used as a new node, overwriting its elm would cause
@@ -167,6 +168,7 @@ export function createPatchFunction(backend) {
       setScope(vnode)
 
       createChildren(vnode, children, insertedVnodeQueue)
+      debugger
       if (isDef(data)) {
         invokeCreateHooks(vnode, insertedVnodeQueue)
       }
@@ -250,6 +252,7 @@ export function createPatchFunction(backend) {
   }
 
   function insert(parent, elm, ref) {
+    debugger
     if (isDef(parent)) {
       if (isDef(ref)) {
         if (nodeOps.parentNode(ref) === parent) {
