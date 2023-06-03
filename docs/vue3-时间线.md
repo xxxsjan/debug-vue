@@ -6,7 +6,7 @@ core\packages\runtime-dom\src\index.ts
 调用createApp(..args)
 
 - const app = ensureRenderer().createApp(...args)
-  - ensureRenderer()
+  - ensureRenderer() => {render,hydrate,createApp}
     - =>createRenderer() 返回createRenderer函数
       - => baseCreateRenderer() 返回结果值
       - =>  {
