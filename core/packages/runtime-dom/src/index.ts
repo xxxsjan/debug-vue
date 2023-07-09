@@ -73,7 +73,6 @@ export const createApp = ((...args) => {
   }
 
   const { mount } = app
-  debugger
   app.mount = (containerOrSelector: Element | ShadowRoot | string): any => {
     // 格式化挂载节点为dom类型
     const container = normalizeContainer(containerOrSelector)
@@ -104,7 +103,9 @@ export const createApp = ((...args) => {
 
     // clear content before mounting
     container.innerHTML = ''
+
     const proxy = mount(container, false, container instanceof SVGElement)
+
     if (container instanceof Element) {
       container.removeAttribute('v-cloak')
       container.setAttribute('data-v-app', '')

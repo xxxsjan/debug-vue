@@ -1,6 +1,8 @@
 # patch
 
-## vm._c  createElement_createElement   创建vnode
+## 创建vnode
+
+vm._c  => createElement => _createElement   
 
 vue/src/core/vdom/create-element.ts
 
@@ -8,9 +10,11 @@ vue/src/core/vdom/create-element.ts
 
 vue\src\core\vdom\patch.ts
 
-走nodeOps.createElement(tag, vnode)
+#### nodeOps.createElement(tag, vnode)
 
-走nodeOps就是dom操作的api
+这一步只创建了dom
+
+nodeOps就是dom操作的api
 
 /vue/src/platforms/web/runtime/node-ops.ts
 

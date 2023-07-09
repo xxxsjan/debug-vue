@@ -712,6 +712,7 @@ function setupStatefulComponent(
 
     setCurrentInstance(instance)
     pauseTracking()
+    debugger
     const setupResult = callWithErrorHandling(
       setup,
       instance,

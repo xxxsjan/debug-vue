@@ -17,9 +17,10 @@
     <script>
       // core\packages\vue\src\index.ts
       // core\packages\runtime-dom\src\index.ts
-      const { createApp, toRefs, reactive } = Vue;
+      const { createApp, toRefs, reactive,ref } = Vue;
       const app = createApp({
         setup() {
+          const value = ref('')
           const state = reactive({
             a: 0,
             b: 1,
