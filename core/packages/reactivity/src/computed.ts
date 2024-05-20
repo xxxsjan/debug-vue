@@ -129,7 +129,7 @@ export function computed<T>(
     getter = getterOrOptions.get
     setter = getterOrOptions.set
   }
-
+  debugger
   const cRef = new ComputedRefImpl(getter, setter, onlyGetter || !setter, isSSR)
 
   if (__DEV__ && debugOptions && !isSSR) {

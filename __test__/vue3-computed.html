@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>computed</title>
+    <script src="../core/packages/vue/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <h1>core\packages\reactivity\src\computed.ts</h1>
+    <div id="app"></div>
+    <button onclick="onBtn()">set</button>
+    <script>
+        const { reactive, effect, computed } = Vue
+
+        const obj = reactive({
+            name: 'kun'
+        })
+
+        const computedObj = computed(() => {
+            return '版本：' + obj.name
+        })
+
+        effect(() => {
+            document.querySelector('#app').innerHTML = computedObj.value
+        })
+
+        function onBtn(params) {
+            obj.name = 'amagi'
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>watch</title>
+    <script src="../core/packages/vue/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <h1>reactive watch</h1>
+    <div id="app">
+        {{obj.name}}
+    </div>
+    <button onclick="onBtn()">set</button>
+    <script>
+        const { reactive, effect, computed, watch, createApp } = Vue
+
+
+        createApp({
+            setup() {
+                const obj = reactive({
+                    name: 'kun'
+                })
+                watch(obj, () => {
+                    console.log('watch reactive obj');
+                }, {
+                    immediate: true
+                })
+
+                function onBtn(params) {
+                    obj.name = 'amagi'
+                }
+
+                return {
+                    obj
+                }
+            }
+        }).mount("#app")
+    </script>
+</body>
+
+</html>

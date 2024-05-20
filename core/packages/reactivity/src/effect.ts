@@ -186,6 +186,7 @@ export function effect<T = any>(
   }
 
   const _effect = new ReactiveEffect(fn)
+  debugger
   if (options) {
     extend(_effect, options)
     if (options.scope) recordEffectScope(_effect, options.scope)
